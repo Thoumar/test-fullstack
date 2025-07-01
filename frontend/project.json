@@ -8,6 +8,9 @@
   "targets": {
     "start": {
       "command": "nx serve"
+    },
+    "dev": {
+      "command": "nx serve"
     }
   }
 }

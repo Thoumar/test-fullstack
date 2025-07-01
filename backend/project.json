@@ -7,6 +7,9 @@
     "start": {
       "command": "cd backend/src && tsx ./index.ts"
     },
+    "dev": {
+      "command": "cd backend/src && tsx --watch ./index.ts"
+    },
     "build": {
       "executor": "@nx/esbuild:esbuild",
       "outputs": ["{options.outputPath}"],
