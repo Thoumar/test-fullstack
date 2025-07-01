@@ -1,9 +1,9 @@
 export interface IFactory {
-    id?: string;
-    factoryName: string;
-    country: string;
-    address: string;
-    latitude: number;
-    longitude: number;
-    yearlyRevenue: number;
+  id?: string;
+  name: string;
+  country: string;
+  address: string;
+  latitude: number;
+  longitude: number;
+  yearlyRevenue: number;
 }

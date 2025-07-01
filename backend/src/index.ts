@@ -55,7 +55,8 @@ app.get('/factories', async (c: Context) => {
   return c.json(
     factories.map(
       (factory: IDbFactory): IFactory => ({
-        factoryName: factory.factory_name,
+        id: factory.id,
+        name: factory.factory_name,
         address: factory.address,
         country: factory.country,
         latitude: factory.latitude,
@@ -69,14 +70,14 @@ app.get('/factories', async (c: Context) => {
 app.post('/factories', async (c: Context) => {
   const client = await dbClientPromise;
 
-  const { factoryName, country, address, latitude, longitude, yearlyRevenue } =
+  const { name, country, address, latitude, longitude, yearlyRevenue } =
     await c.req.json();
-  if (!factoryName || !country || !address || !yearlyRevenue) {
+  if (!name || !country || !address || !yearlyRevenue) {
     return c.text('Invalid body.', 400);
   }
 
   const factory: IFactory = {
-    factoryName,
+    name,
     country,
     address,
     latitude: +latitude,
@@ -87,7 +88,7 @@ app.post('/factories', async (c: Context) => {
   await client.run(
     `INSERT INTO factories (factory_name, address, country, latitude, longitude, yearly_revenue)
 VALUES (?, ?, ?, ?, ?, ?);`,
-    factory.factoryName,
+    factory.name,
     factory.address,
     factory.country,
     factory.latitude,

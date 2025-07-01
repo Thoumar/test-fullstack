@@ -1,6 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import './FactoriesTable.css';
+
+import { DataGrid, GridColDef } from '@mui/x-data-grid';
 
 import { IFactory } from '@climadex/types';
 import { FactoryRow } from './FactoryRow';
@@ -22,12 +24,29 @@ async function fetchFactories({
   return json;
 }
 
+const columns: GridColDef[] = [
+  { field: 'name', headerName: 'Factory name', width: 200 },
+  { field: 'address', headerName: 'Address', width: 200 },
+  { field: 'country', headerName: 'Country', width: 150 },
+  { field: 'latitude', headerName: 'Latitude', width: 150 },
+  { field: 'longitude', headerName: 'Longitude', width: 150 },
+  {
+    field: 'yearlyRevenue',
+    headerName: 'Yearly Revenue',
+    type: 'number',
+    width: 180,
+  },
+];
+
 export function FactoriesTable({ filterString }: { filterString: string }) {
   const [factories, setFactories] = useState<IFactory[]>([]);
+  const showDatagrid = true;
 
   useEffect(() => {
     fetchFactories({ filterString }).then((json) => setFactories(json));
   }, [filterString]);
+
+  if (showDatagrid) return <DataGrid rows={factories} columns={columns} />;
 
   return (
     <table>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { FactoriesTable } from './FactoriesTable';
 
 import './index.css';
