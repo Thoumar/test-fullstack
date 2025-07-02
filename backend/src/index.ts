@@ -3,6 +3,7 @@ import { Hono } from 'hono';
 import { cors } from 'hono/cors';
 
 import { getFactories } from './routes/getFactories';
+import { getReport } from './routes/getReport';
 import { dbMiddleware } from './middlewares/db';
 import { addFactory } from './routes/addFactory';
 import './types/hono';
@@ -13,6 +14,8 @@ app.use('/*', cors());
 app.use('/*', dbMiddleware);
 
 app.get('/factories', getFactories);
+
+app.get('/reports/:id', getReport);
 
 app.post('/factories', addFactory);
 
