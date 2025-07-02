@@ -1,8 +1,7 @@
 #sidebar {
-  top: 0;
-  width: 40px;
-  min-height: 100vh;
-  padding: 12px;
+  grid-area: sidebar;
+  height: 100vh;
+  padding: .5rem;
   text-align: center;
   background-color: rgb(44, 112, 62);
 }

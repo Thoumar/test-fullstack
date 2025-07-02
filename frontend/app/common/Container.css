@@ -1,5 +1,7 @@
 #container {
-  padding: 24px 64px;
-  height: 100%;
-  max-width: 100%;
+  grid-area: container;
+  padding: 1.5rem 4rem;
+  overflow-x: hidden;
+  overflow-y: auto;
+
 }
