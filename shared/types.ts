@@ -7,3 +7,7 @@ export interface IFactory {
   longitude: number;
   yearlyRevenue: number;
 }
+
+// TODO: maybe not export TIMEFRAMES but ony types ?
+export const TIMEFRAMES = ['2030', '2050', '2070', '2090'] as const;
+export type TimeFrame = (typeof TIMEFRAMES)[number];

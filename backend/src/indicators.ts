@@ -1,9 +1,8 @@
+import { TimeFrame } from '@climadex/types';
+
 import gdal from 'gdal-async';
 
 const wgs84 = gdal.SpatialReference.fromEPSG(4326);
-
-export const TIMEFRAMES = ['2030', '2050', '2070', '2090'] as const;
-export type TimeFrame = (typeof TIMEFRAMES)[number];
 
 export const getMeanTemperatureWarmestQuarter = ({
   latitude,

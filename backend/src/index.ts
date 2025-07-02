@@ -4,10 +4,10 @@ import { cors } from 'hono/cors';
 import sqlite3 from 'sqlite3';
 import { open } from 'sqlite';
 
-import { IFactory } from '@climadex/types';
-import { IDbFactory } from './types';
+import { IFactory, TimeFrame } from '@climadex/types';
+import { IDbFactory, TIMEFRAMES } from './types';
 
-import { getMeanTemperatureWarmestQuarter, TIMEFRAMES } from './indicators';
+import { getMeanTemperatureWarmestQuarter } from './indicators';
 
 const app = new Hono();
 
@@ -53,17 +53,42 @@ app.get('/factories', async (c: Context) => {
     : await client.all('SELECT * FROM factories');
 
   return c.json(
-    factories.map(
-      (factory: IDbFactory): IFactory => ({
+    factories.map((factory: IDbFactory): IFactory => {
+      const riskData: Record<TimeFrame, number> = {
+        '2030': 0,
+        '2050': 0,
+        '2070': 0,
+        '2090': 0,
+      };
+
+      for (const timeframe of TIMEFRAMES) {
+        const temperature = getMeanTemperatureWarmestQuarter({
+          latitude: factory.latitude,
+          longitude: factory.longitude,
+          timeframe: timeframe as TimeFrame,
+        });
+
+        if (temperature !== null) {
+          riskData[timeframe] = temperature;
+        }
+      }
+
+      return {
         id: factory.id,
         name: factory.factory_name,
-        address: factory.address,
         country: factory.country,
+        address: factory.address,
         latitude: factory.latitude,
         longitude: factory.longitude,
         yearlyRevenue: factory.yearly_revenue,
-      })
-    )
+        riskData: {
+          '2030': riskData['2030'],
+          '2050': riskData['2050'],
+          '2070': riskData['2070'],
+          '2090': riskData['2090'],
+        },
+      } as IFactory;
+    })
   );
 });
 
