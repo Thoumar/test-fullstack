@@ -6,6 +6,7 @@ export interface IFactory {
   latitude: number;
   longitude: number;
   yearlyRevenue: number;
+  riskData?: Record<TimeFrame, number>;
 }
 
 // TODO: maybe not export TIMEFRAMES but ony types ?

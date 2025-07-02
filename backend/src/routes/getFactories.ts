@@ -1,5 +1,5 @@
 import { Context } from 'hono';
-import { IDbFactory } from '../types';
+import { IDbFactory } from '../types/factory';
 import { IFactory, TimeFrame, TIMEFRAMES } from '@climadex/types';
 import { getMeanTemperatureWarmestQuarter } from '../indicators';
 

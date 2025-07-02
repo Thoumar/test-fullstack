@@ -3,8 +3,10 @@ import { Context } from 'hono';
 
 export const addFactory = async (c: Context) => {
   const client = c.get('db');
+
   const { name, country, address, latitude, longitude, yearlyRevenue } =
     await c.req.json();
+
   if (!name || !country || !address || !yearlyRevenue) {
     return c.text('Invalid body.', 400);
   }
