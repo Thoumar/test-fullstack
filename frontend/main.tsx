@@ -6,12 +6,12 @@ import {
   redirect,
   RouterProvider,
 } from 'react-router-dom';
-import { FactoriesPage } from './app/pages/factories';
-import { Wrapper } from './app/common/Wrapper';
+import { FactoriesPage } from './pages/factories';
+import { Wrapper } from './common/Wrapper';
 
 import './main.css';
-import { AddFactoryPage } from './app/pages/add-factory';
-import { ReportPage } from './app/pages/report';
+import { AddFactoryPage } from './pages/add-factory';
+import { ReportPage } from './pages/report';
 
 const router = createBrowserRouter([
   {
