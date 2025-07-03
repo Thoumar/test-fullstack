@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { IFactory } from '@climadex/types';
+
 import Chip from '@mui/material/Chip';
+import { RiskLineChart } from '../../components/RiskLineChart';
+import ArrowBackRoundedIcon from '@mui/icons-material/ArrowBackRounded';
 
 async function fetchFactory(id: string): Promise<IFactory> {
   const response = await fetch(`http://localhost:3000/reports/${id}`);
@@ -106,6 +109,10 @@ export function ReportPage() {
 
   return (
     <div style={{ padding: '20px' }}>
+      <a href="/factories">
+        <ArrowBackRoundedIcon />
+        Go back
+      </a>
       <h1>Factory Report</h1>
 
       <div style={{ marginBottom: '30px' }}>
@@ -167,9 +174,17 @@ export function ReportPage() {
               >
                 <h4>{timeframe}</h4>
                 <RiskDisplay temperature={riskValue} />
+                <span>{factory.riskData[timeframe]}°C</span>
               </div>
             ))}
           </div>
+        </div>
+      )}
+
+      {factory?.riskData && (
+        <div style={{ marginTop: '30px' }}>
+          <h3>Risk Data</h3>
+          <RiskLineChart chartData={factory.riskData} />
         </div>
       )}
     </div>
