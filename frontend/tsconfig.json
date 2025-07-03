@@ -6,6 +6,6 @@
     "baseUrl": "../"
   },
   "files": [],
-  "include": ["app/**/*.ts", "app/**/*.tsx", "app/**/*.d.ts"],
+  "include": ["./**/*.ts", "./**/*.tsx", "./**/*.d.ts"],
   "extends": "../tsconfig.base.json"
 }

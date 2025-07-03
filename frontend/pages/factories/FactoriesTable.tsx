@@ -80,6 +80,10 @@ export function FactoriesTable({ filterString }: { filterString: string }) {
   }, [filterString]);
 
   return (
-    <DataGrid rows={factories.map(factoryToRowMapper)} columns={columns} />
+    <DataGrid
+      className="data-grid"
+      rows={factories.map(factoryToRowMapper)}
+      columns={columns}
+    />
   );
 }
