@@ -1,4 +1,4 @@
-import { TimeFrame } from '@climadex/types';
+import { TimeFrame } from '@climadex/shared';
 
 import gdal from 'gdal-async';
 

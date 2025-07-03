@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "declaration": true,
+    "emitDeclarationOnly": false, // Needed to emit .js
+    "outDir": "../dist/shared",
+    "module": "ESNext",
+    "target": "ES2020",
+    "moduleResolution": "Node",
+    "esModuleInterop": true
+  },
+  "include": ["src"]
+}

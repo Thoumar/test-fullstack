@@ -2,9 +2,10 @@
   "compilerOptions": {
     "jsx": "react-jsx",
     "allowJs": false,
-    "types": ["vite/client", "node"]
+    "types": ["vite/client", "node"],
+    "baseUrl": "../"
   },
   "files": [],
-  "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.d.ts"],
+  "include": ["app/**/*.ts", "app/**/*.tsx", "app/**/*.d.ts"],
   "extends": "../tsconfig.base.json"
 }

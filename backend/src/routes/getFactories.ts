@@ -1,6 +1,6 @@
 import { Context } from 'hono';
 import { IDbFactory } from '../types/factory';
-import { IFactory, TimeFrame, TIMEFRAMES } from '@climadex/types';
+import { IFactory, TimeFrame, TIMEFRAMES } from '@climadex/shared';
 import { getMeanTemperatureWarmestQuarter } from '../indicators';
 
 export const getFactories = async (c: Context) => {

@@ -2,6 +2,7 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
+import path from 'path';
 
 export default defineConfig({
   root: __dirname,
@@ -20,11 +21,17 @@ export default defineConfig({
   plugins: [react(), nxViteTsPaths()],
 
   build: {
-    outDir: '../dist/frontend',
+    outDir: 'dist/frontend',
     emptyOutDir: true,
     reportCompressedSize: true,
     commonjsOptions: {
       transformMixedEsModules: true,
+    },
+  },
+
+  resolve: {
+    alias: {
+      '@climadex/shared': path.resolve(__dirname, 'shared/src'),
     },
   },
 

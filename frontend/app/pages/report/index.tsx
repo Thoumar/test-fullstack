@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { IFactory } from '@climadex/types';
+import { IFactory } from '@climadex/shared';
 
 import Chip from '@mui/material/Chip';
 import { RiskLineChart } from '../../components/RiskLineChart';

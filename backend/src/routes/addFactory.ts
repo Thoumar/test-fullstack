@@ -1,4 +1,4 @@
-import { IFactory } from '@climadex/types';
+import { IFactory } from '@climadex/shared';
 import { Context } from 'hono';
 
 export const addFactory = async (c: Context) => {

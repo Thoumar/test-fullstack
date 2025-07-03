@@ -1,16 +1,54 @@
 {
   "name": "frontend",
   "$schema": "../node_modules/nx/schemas/project-schema.json",
-  "includedScripts": [],
   "sourceRoot": "frontend/src",
   "projectType": "application",
-  "tags": [],
+  "tags": ["scope:frontend", "type:app"],
+  "implicitDependencies": ["shared"],
   "targets": {
     "start": {
+      "dependsOn": ["shared:build"],
       "command": "nx serve"
     },
-    "dev": {
-      "command": "nx serve"
+    "serve": {
+      "executor": "@nx/vite:dev-server",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "frontend:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "frontend:build:development",
+          "hmr": true
+        },
+        "production": {
+          "buildTarget": "frontend:build:production",
+          "hmr": false
+        }
+      }
+    },
+    "build": {
+      "executor": "@nx/vite:build",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "outputPath": "dist/frontend"
+      },
+      "configurations": {
+        "development": {
+          "mode": "development"
+        },
+        "production": {
+          "mode": "production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["frontend/**/*.{ts,tsx,js,jsx}"]
+      }
     }
   }
 }

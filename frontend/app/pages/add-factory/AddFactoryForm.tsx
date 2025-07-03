@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
 import './AddFactoryForm.css';
-import { IFactory } from '@climadex/types';
+import { IFactory } from '@climadex/shared';
 import { Navigate } from 'react-router-dom';
 
 async function createFactory(factory: IFactory) {

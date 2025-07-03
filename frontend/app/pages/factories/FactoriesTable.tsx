@@ -4,7 +4,7 @@ import './FactoriesTable.css';
 
 import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
 
-import { IFactory, TIMEFRAMES } from '@climadex/types';
+import { IFactory, TIMEFRAMES, TimeFrame } from '@climadex/shared';
 import { RiskLevelCell } from '../../components/RiskLevelCell';
 
 async function fetchFactories({
@@ -36,15 +36,16 @@ const columns: GridColDef[] = [
     type: 'number',
     flex: 1,
   },
-  ...TIMEFRAMES.map((timeframe) => ({
-    field: `riskLevel${timeframe}`,
-    headerName: `Risk level for ${timeframe}`,
-    type: 'number',
-    flex: 1,
-    renderCell: (params: GridRenderCellParams) => (
-      <RiskLevelCell params={params} />
-    ),
-  })),
+  ...TIMEFRAMES.map(
+    (timeframe: TimeFrame): GridColDef => ({
+      field: `riskLevel${timeframe}`,
+      headerName: `Risk level for ${timeframe}`,
+      flex: 1,
+      renderCell: (params: GridRenderCellParams) => (
+        <RiskLevelCell params={params} />
+      ),
+    })
+  ),
   {
     field: 'report',
     headerName: 'Report',
@@ -65,10 +66,10 @@ const factoryToRowMapper = (factory: IFactory) => ({
   latitude: factory.latitude,
   longitude: factory.longitude,
   yearlyRevenue: factory.yearlyRevenue,
-  riskLevel2030: factory.riskData['2030'] ?? 'No data',
-  riskLevel2050: factory.riskData['2050'] ?? 'No data',
-  riskLevel2070: factory.riskData['2070'] ?? 'No data',
-  riskLevel2090: factory.riskData['2090'] ?? 'No data',
+  riskLevel2030: factory.riskData?.['2030'] ?? 'No data',
+  riskLevel2050: factory.riskData?.['2050'] ?? 'No data',
+  riskLevel2070: factory.riskData?.['2070'] ?? 'No data',
+  riskLevel2090: factory.riskData?.['2090'] ?? 'No data',
 });
 
 export function FactoriesTable({ filterString }: { filterString: string }) {

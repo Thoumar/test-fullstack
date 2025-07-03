@@ -21,7 +21,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@climadex/types": ["shared/types.ts"] 
+      "@climadex/shared": ["shared/src/index.ts"]
     },
     "allowSyntheticDefaultImports": true,
     "noImplicitReturns": true,
@@ -32,4 +32,3 @@
   },
   "exclude": ["node_modules", "tmp", "dist"]
 }
-

@@ -4,7 +4,7 @@
   "license": "MIT",
   "scripts": {
     "start": "nx run-many --all --target=start",
-    "dev": "nx run-many --all --target=dev",
+    "dev": "nx run-many --all --target=serve",
     "build": "nx build",
     "test": "nx test"
   },
@@ -28,8 +28,8 @@
     "sqlite3": "^5.1.7",
     "tsx": "^4.17.0"
   },
-  "bundledDependencies": [
-    "@climadex/types"
+  "implicitDependencies": [
+    "shared"
   ],
   "peerDependencies": {
     "react": "^17.0.0 || ^18.0.0 || ^19.0.0",

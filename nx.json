@@ -11,7 +11,6 @@
     ],
     "sharedGlobals": ["{workspaceRoot}/.gitlab-ci.yml"]
   },
-  "nxCloudAccessToken": "...",
   "plugins": [
     {
       "plugin": "@nx/vite/plugin",
@@ -30,7 +29,7 @@
       }
     }
   ],
-  "defaultProject": "src",
+  "defaultProject": "frontend",
   "generators": {
     "@nx/react": {
       "application": {
@@ -46,6 +45,15 @@
         "style": "@emotion/styled",
         "linter": "eslint"
       }
+    }
+  },
+  "targetDefaults": {
+    "build": {
+      "dependsOn": ["^build"],
+      "inputs": ["production", "^production"]
+    },
+    "lint": {
+      "inputs": ["default", "{workspaceRoot}/.eslintrc.json"]
     }
   }
 }
