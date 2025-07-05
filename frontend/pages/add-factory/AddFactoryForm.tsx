@@ -4,7 +4,7 @@ import { Formik, Form, Field, FieldProps } from 'formik';
 import { z } from 'zod';
 import { toFormikValidationSchema } from 'zod-formik-adapter';
 import { Navigate } from 'react-router-dom';
-import { IFactory } from '@climadex/shared';
+import { useFactories } from '../../hooks';
 
 const factorySchema = z.object({
   name: z.string().min(1, 'Please give the factory a name.'),
@@ -34,21 +34,10 @@ const initialValues: FactoryFormValues = {
   yearlyRevenue: 0,
 };
 
-async function createFactory(factory: IFactory) {
-  const response = await fetch('http://localhost:3000/factories', {
-    method: 'POST',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json;charset=UTF-8',
-    },
-    body: JSON.stringify(factory),
-  });
-  return response.json();
-}
-
 export function AddFactoryForm() {
   const [formError, setFormError] = useState('');
   const [formSuccess, setFormSuccess] = useState(false);
+  const { addFactory } = useFactories();
 
   if (formSuccess) return <Navigate to="/factories" />;
 
@@ -58,10 +47,11 @@ export function AddFactoryForm() {
       validationSchema={toFormikValidationSchema(factorySchema)}
       onSubmit={async (values, { setSubmitting }) => {
         try {
-          await createFactory(values);
+          setFormError('');
+          await addFactory.mutateAsync(values);
           setFormSuccess(true);
         } catch (err) {
-          setFormError('An error has occurred.');
+          setFormError(addFactory.error?.message || 'An error has occurred.');
         } finally {
           setSubmitting(false);
         }
@@ -151,9 +141,9 @@ export function AddFactoryForm() {
               type="submit"
               variant="contained"
               color="primary"
-              disabled={!isValid || isSubmitting}
+              disabled={!isValid || isSubmitting || addFactory.isLoading}
             >
-              Add
+              {addFactory.isLoading ? 'Adding...' : 'Add'}
             </Button>
           </Box>
         </Form>
