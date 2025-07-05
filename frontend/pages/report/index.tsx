@@ -1,6 +1,4 @@
-import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { IFactory } from '@climadex/shared';
 
 import {
   Box,
@@ -9,21 +7,9 @@ import {
   Paper,
   CircularProgress,
   Alert,
-  Link,
-  Divider,
 } from '@mui/material';
-import ArrowBackRoundedIcon from '@mui/icons-material/ArrowBackRounded';
 import { RiskLineChart } from '../../components/RiskLineChart';
-
-async function fetchFactory(id: string): Promise<IFactory> {
-  const response = await fetch(`http://localhost:3000/reports/${id}`);
-
-  if (!response.ok) {
-    throw new Error(`Failed to fetch factory: ${response.statusText}`);
-  }
-
-  return response.json();
-}
+import { useReport } from '../../hooks';
 
 const getRiskLevel = (temp: number): string => {
   if (temp > 30) return 'HIGH';
@@ -82,29 +68,22 @@ const RiskDisplay = ({ temperature }: { temperature: unknown }) => {
 
 export function ReportPage() {
   const params = useParams();
-  const [factory, setFactory] = useState<IFactory | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const {
+    data: factory,
+    isLoading,
+    isError,
+    error,
+  } = useReport(params.reportId || '');
 
-  useEffect(() => {
-    if (!params.reportId) {
-      setError('No report ID provided');
-      setLoading(false);
-      return;
-    }
+  if (!params.reportId) {
+    return (
+      <Box sx={{ p: 3 }}>
+        <Alert severity="error">No report ID provided</Alert>
+      </Box>
+    );
+  }
 
-    fetchFactory(params.reportId)
-      .then((factoryData) => {
-        setFactory(factoryData);
-        setLoading(false);
-      })
-      .catch((err) => {
-        setError(err.message);
-        setLoading(false);
-      });
-  }, [params.reportId]);
-
-  if (loading) {
+  if (isLoading) {
     return (
       <Box
         sx={{
@@ -122,10 +101,12 @@ export function ReportPage() {
     );
   }
 
-  if (error) {
+  if (isError) {
     return (
       <Box sx={{ p: 3 }}>
-        <Alert severity="error">{error}</Alert>
+        <Alert severity="error">
+          {error?.message || 'Failed to load factory report'}
+        </Alert>
       </Box>
     );
   }
