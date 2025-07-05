@@ -6,7 +6,6 @@ import { getReport } from './routes/getReport';
 import { dbMiddleware } from './middlewares/db';
 import { addFactory } from './routes/addFactory';
 import { getFactories } from './routes/getFactories';
-import './types/hono';
 
 const app = new Hono();
 
