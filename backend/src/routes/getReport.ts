@@ -2,15 +2,22 @@ import { Context } from 'hono';
 
 import { IDbFactory, IFactory, TimeFrame, TIMEFRAMES } from '@climadex/shared';
 
+import { getReportParamsSchema } from '../validation/schemas';
 import { getMeanTemperatureWarmestQuarter } from '../indicators';
 
 export const getReport = async (c: Context) => {
   const client = c.get('db');
-  const id = c.req.param('id');
 
-  if (!id) {
-    return c.json({ error: 'Factory ID is required' }, 400);
+  const params = { id: c.req.param('id') };
+  const validation = getReportParamsSchema.safeParse(params);
+  if (!validation.success) {
+    return c.json(
+      { error: 'Invalid parameters', details: validation.error.errors },
+      400
+    );
   }
+
+  const { id } = validation.data;
 
   const factory = (await client.get('SELECT * FROM factories WHERE id = ?', [
     id,

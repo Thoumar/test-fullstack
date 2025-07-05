@@ -2,11 +2,22 @@ import { Context } from 'hono';
 
 import { IDbFactory, IFactory, TimeFrame, TIMEFRAMES } from '@climadex/shared';
 
+import { getFactoriesQuerySchema } from '../validation/schemas';
 import { getMeanTemperatureWarmestQuarter } from '../indicators';
 
 export const getFactories = async (c: Context) => {
   const client = c.get('db');
-  const query = c.req.query('q');
+
+  const queryParams = { q: c.req.query('q') };
+  const validation = getFactoriesQuerySchema.safeParse(queryParams);
+  if (!validation.success) {
+    return c.json(
+      { error: 'Invalid query parameters', details: validation.error.errors },
+      400
+    );
+  }
+
+  const { q: query } = validation.data;
 
   const factories = query
     ? await client.all(
