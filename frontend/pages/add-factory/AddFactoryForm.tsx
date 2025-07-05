@@ -6,6 +6,8 @@ import { toFormikValidationSchema } from 'zod-formik-adapter';
 import { Navigate } from 'react-router-dom';
 import { useFactories } from '../../hooks';
 
+import styles from './AddFactoryForm.module.css';
+
 const factorySchema = z.object({
   name: z.string().min(1, 'Please give the factory a name.'),
   country: z.string().min(1, 'Please specify a country.'),
@@ -58,8 +60,8 @@ export function AddFactoryForm() {
       }}
     >
       {({ isSubmitting, isValid, errors, touched }) => (
-        <Form noValidate>
-          <Box display="flex" flexDirection="column" gap={2} maxWidth={400}>
+        <Form noValidate className={styles.form}>
+          <Box display="flex" flexDirection="column" gap={2} width={400}>
             {formError && <Typography color="error">{formError}</Typography>}
 
             <Field name="name">

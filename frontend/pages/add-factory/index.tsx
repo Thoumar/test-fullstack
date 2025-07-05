@@ -1,9 +1,12 @@
+import { Box } from '@mui/material';
 import { AddFactoryForm } from './AddFactoryForm';
+
+import styles from './index.module.css';
 
 export function AddFactoryPage() {
   return (
-    <div id="main">
+    <Box className={styles.page}>
       <AddFactoryForm />
-    </div>
+    </Box>
   );
 }

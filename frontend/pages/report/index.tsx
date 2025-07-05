@@ -2,9 +2,18 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { IFactory } from '@climadex/shared';
 
-import Chip from '@mui/material/Chip';
-import { RiskLineChart } from '../../components/RiskLineChart';
+import {
+  Box,
+  Typography,
+  Chip,
+  Paper,
+  CircularProgress,
+  Alert,
+  Link,
+  Divider,
+} from '@mui/material';
 import ArrowBackRoundedIcon from '@mui/icons-material/ArrowBackRounded';
+import { RiskLineChart } from '../../components/RiskLineChart';
 
 async function fetchFactory(id: string): Promise<IFactory> {
   const response = await fetch(`http://localhost:3000/reports/${id}`);
@@ -53,7 +62,7 @@ const RiskDisplay = ({ temperature }: { temperature: unknown }) => {
     temperature === undefined ||
     typeof temperature !== 'number'
   ) {
-    return <span>No Data</span>;
+    return <Typography variant="body2">No Data</Typography>;
   }
 
   const riskLevel = getRiskLevel(temperature);
@@ -96,97 +105,181 @@ export function ReportPage() {
   }, [params.reportId]);
 
   if (loading) {
-    return <div>Loading factory report...</div>;
+    return (
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: '50vh',
+        }}
+      >
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+          <CircularProgress />
+          <Typography variant="h6">Loading factory report...</Typography>
+        </Box>
+      </Box>
+    );
   }
 
   if (error) {
-    return <div>Error: {error}</div>;
+    return (
+      <Box sx={{ p: 3 }}>
+        <Alert severity="error">{error}</Alert>
+      </Box>
+    );
   }
 
   if (!factory) {
-    return <div>Factory not found</div>;
+    return (
+      <Box sx={{ p: 3 }}>
+        <Alert severity="warning">Factory not found</Alert>
+      </Box>
+    );
   }
 
   return (
-    <div style={{ padding: '20px' }}>
-      <a href="/factories">
-        <ArrowBackRoundedIcon />
-        Go back
-      </a>
-      <h1>Factory Report</h1>
+    <Box sx={{ p: 3 }}>
+      <Box sx={{ mb: 4 }}>
+        <Typography variant="h4" component="h2" gutterBottom>
+          {factory.name}
+        </Typography>
 
-      <div style={{ marginBottom: '30px' }}>
-        <h2>{factory.name}</h2>
-
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(2, 1fr)',
-            gap: '20px',
-            marginTop: '20px',
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: { xs: 'column', md: 'row' },
+            gap: 3,
+            mt: 2,
           }}
         >
-          <div>
-            <h3>Location Information</h3>
-            <p>
-              <strong>Address:</strong> {factory.address}
-            </p>
-            <p>
-              <strong>Country:</strong> {factory.country}
-            </p>
-            <p>
-              <strong>Latitude:</strong> {factory.latitude}
-            </p>
-            <p>
-              <strong>Longitude:</strong> {factory.longitude}
-            </p>
-          </div>
+          <Box sx={{ flex: 1 }}>
+            <Paper sx={{ p: 3, height: '100%' }} elevation={0}>
+              <Typography variant="h5" component="h3" gutterBottom>
+                Location Information
+              </Typography>
+              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+                <Box>
+                  <Typography
+                    variant="body1"
+                    component="span"
+                    fontWeight="bold"
+                  >
+                    Address:
+                  </Typography>
+                  <Typography variant="body1" component="span" sx={{ ml: 1 }}>
+                    {factory.address}
+                  </Typography>
+                </Box>
+                <Box>
+                  <Typography
+                    variant="body1"
+                    component="span"
+                    fontWeight="bold"
+                  >
+                    Country:
+                  </Typography>
+                  <Typography variant="body1" component="span" sx={{ ml: 1 }}>
+                    {factory.country}
+                  </Typography>
+                </Box>
+                <Box>
+                  <Typography
+                    variant="body1"
+                    component="span"
+                    fontWeight="bold"
+                  >
+                    Latitude:
+                  </Typography>
+                  <Typography variant="body1" component="span" sx={{ ml: 1 }}>
+                    {factory.latitude}
+                  </Typography>
+                </Box>
+                <Box>
+                  <Typography
+                    variant="body1"
+                    component="span"
+                    fontWeight="bold"
+                  >
+                    Longitude:
+                  </Typography>
+                  <Typography variant="body1" component="span" sx={{ ml: 1 }}>
+                    {factory.longitude}
+                  </Typography>
+                </Box>
+              </Box>
+            </Paper>
+          </Box>
 
-          <div>
-            <h3>Business Information</h3>
-            <p>
-              <strong>Yearly Revenue:</strong> $
-              {factory.yearlyRevenue?.toLocaleString()}
-            </p>
-          </div>
-        </div>
-      </div>
+          <Box sx={{ flex: 1 }}>
+            <Paper sx={{ p: 3, height: '100%' }} elevation={0}>
+              <Typography variant="h5" component="h3" gutterBottom>
+                Business Information
+              </Typography>
+              <Box>
+                <Typography variant="body1" component="span" fontWeight="bold">
+                  Yearly Revenue:
+                </Typography>
+                <Typography variant="body1" component="span" sx={{ ml: 1 }}>
+                  ${factory.yearlyRevenue?.toLocaleString()}
+                </Typography>
+              </Box>
+            </Paper>
+          </Box>
+        </Box>
+      </Box>
 
       {factory.riskData && (
-        <div>
-          <h3>Risk Assessment by Timeframe</h3>
-          <div
-            style={{
+        <Box sx={{ mb: 4 }}>
+          <Typography variant="h5" component="h3" gutterBottom>
+            Risk Assessment by Timeframe
+          </Typography>
+          <Box
+            sx={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(4, 1fr)',
-              gap: '15px',
-              marginTop: '15px',
+              gridTemplateColumns: {
+                xs: '1fr',
+                sm: 'repeat(2, 1fr)',
+                md: 'repeat(4, 1fr)',
+              },
+              gap: 2,
+              mt: 1,
             }}
           >
             {Object.entries(factory.riskData).map(([timeframe, riskValue]) => (
-              <div
+              <Paper
+                elevation={0}
                 key={timeframe}
-                style={{
-                  border: '1px solid #ccc',
-                  padding: '15px',
-                  borderRadius: '5px',
+                sx={{
+                  p: 2,
+                  textAlign: 'center',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: 1,
+                  height: '100%',
                 }}
               >
-                <h4>{timeframe}</h4>
+                <Typography variant="h6" component="h4">
+                  {timeframe}
+                </Typography>
                 <RiskDisplay temperature={riskValue} />
-                <span>{riskValue}°C</span>
-              </div>
+                <Typography variant="body2">{riskValue}°C</Typography>
+              </Paper>
             ))}
-          </div>
-        </div>
+          </Box>
+        </Box>
       )}
 
       {factory?.riskData && (
-        <div style={{ marginTop: '30px' }}>
-          <h3>Risk Data</h3>
-          <RiskLineChart chartData={factory.riskData} />
-        </div>
+        <Box>
+          <Typography variant="h5" component="h3" gutterBottom>
+            Risk Data
+          </Typography>
+          <Paper sx={{ p: 3, mt: 2 }} elevation={0}>
+            <RiskLineChart chartData={factory.riskData} />
+          </Paper>
+        </Box>
       )}
-    </div>
+    </Box>
   );
 }

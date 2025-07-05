@@ -4,6 +4,7 @@ import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
 import { SparkLineChart } from '@mui/x-charts/SparkLineChart';
 
 import { IFactory, TIMEFRAMES } from '@climadex/shared';
+import DescriptionRoundedIcon from '@mui/icons-material/DescriptionRounded';
 import { Box, Button } from '@mui/material';
 import { useFactories } from '../../hooks';
 
@@ -62,8 +63,9 @@ const columns: GridColDef[] = [
         color="primary"
         href={`/reports/${params.row.id}`}
         style={{ width: '100%' }}
+        startIcon={<DescriptionRoundedIcon />}
       >
-        View Report
+        Report
       </Button>
     ),
   },
