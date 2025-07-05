@@ -1,4 +1,4 @@
-import { TIMEFRAMES } from './constants';
+import { TimeFrame } from './timeframe';
 
 export interface Factory {
   id?: string;
@@ -20,5 +20,3 @@ export interface IDbFactory {
   longitude: number;
   yearly_revenue: number;
 }
-
-export type TimeFrame = (typeof TIMEFRAMES)[number];
