@@ -19,7 +19,7 @@
       "outputs": ["{options.outputPath}"],
       "dependsOn": ["shared:build"],
       "options": {
-        "outputPath": "dist/backend",
+        "outputPath": "backend/dist",
         "main": "backend/src/index.ts",
         "tsConfig": "backend/tsconfig.json",
         "assets": ["backend/package.json"]

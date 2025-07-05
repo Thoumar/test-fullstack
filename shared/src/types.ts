@@ -1,6 +1,6 @@
 import { TIMEFRAMES } from './constants';
 
-export interface IFactory {
+export interface Factory {
   id?: string;
   name: string;
   country: string;

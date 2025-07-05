@@ -21,7 +21,7 @@ export default defineConfig({
   plugins: [react(), nxViteTsPaths()],
 
   build: {
-    outDir: 'dist/frontend',
+    outDir: 'frontend/dist',
     emptyOutDir: true,
     reportCompressedSize: true,
     commonjsOptions: {

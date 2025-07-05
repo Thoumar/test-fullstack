@@ -32,7 +32,7 @@
       "outputs": ["{options.outputPath}"],
       "defaultConfiguration": "production",
       "options": {
-        "outputPath": "dist/frontend"
+        "outputPath": "frontend/dist"
       },
       "configurations": {
         "development": {
