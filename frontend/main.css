@@ -21,9 +21,3 @@ html, body, #root {
   height: 100vh;
   overflow: hidden;
 }
-
-a,
-a:visited {
-  text-decoration: none;
-  color: rgb(17, 0, 166);
-}

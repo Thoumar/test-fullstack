@@ -174,7 +174,7 @@ export function ReportPage() {
               >
                 <h4>{timeframe}</h4>
                 <RiskDisplay temperature={riskValue} />
-                <span>{factory.riskData[timeframe]}°C</span>
+                <span>{riskValue}°C</span>
               </div>
             ))}
           </div>

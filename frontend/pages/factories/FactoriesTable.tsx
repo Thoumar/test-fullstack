@@ -5,7 +5,8 @@ import './FactoriesTable.css';
 import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
 import { SparkLineChart } from '@mui/x-charts/SparkLineChart';
 
-import { IFactory, TIMEFRAMES, TimeFrame } from '@climadex/shared';
+import { IFactory, TIMEFRAMES } from '@climadex/shared';
+import { Button } from '@mui/material';
 
 async function fetchFactories({
   filterString,
@@ -73,9 +74,15 @@ const columns: GridColDef[] = [
     headerName: 'Report',
     flex: 1,
     renderCell: (params: GridRenderCellParams) => (
-      <a href={`/reports/${params.row.id}`} rel="noopener noreferrer">
+      <Button
+        size="small"
+        variant="text"
+        color="primary"
+        href={`/reports/${params.row.id}`}
+        style={{ width: '100%' }}
+      >
         View Report
-      </a>
+      </Button>
     ),
   },
 ];
@@ -103,7 +110,14 @@ export function FactoriesTable({ filterString }: { filterString: string }) {
       className="datagrid"
       rows={factories.map(factoryToRowMapper)}
       columns={columns}
-      // density="compact"
+      density="compact"
+      loading={factories.length === 0}
+      slotProps={{
+        loadingOverlay: {
+          variant: 'skeleton',
+          noRowsVariant: 'skeleton',
+        },
+      }}
     />
   );
 }

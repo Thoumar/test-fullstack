@@ -1,12 +1,12 @@
-import React from 'react';
 import { Outlet } from 'react-router-dom';
 
-import './Container.css';
+import styles from './Container.module.css';
+import { Box } from '@mui/material';
 
 export function Container() {
   return (
-    <div id="container">
+    <Box className={styles.container}>
       <Outlet />
-    </div>
+    </Box>
   );
 }

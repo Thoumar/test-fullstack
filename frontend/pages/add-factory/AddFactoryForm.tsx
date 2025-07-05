@@ -1,136 +1,163 @@
-import React, { useState } from 'react';
-import { SubmitHandler, useForm } from 'react-hook-form';
-
-import './AddFactoryForm.css';
-import { IFactory } from '@climadex/shared';
+import { useState } from 'react';
+import { Button, TextField, Box, Typography } from '@mui/material';
+import { Formik, Form, Field, FieldProps } from 'formik';
+import { z } from 'zod';
+import { toFormikValidationSchema } from 'zod-formik-adapter';
 import { Navigate } from 'react-router-dom';
+import { IFactory } from '@climadex/shared';
+
+const factorySchema = z.object({
+  name: z.string().min(1, 'Please give the factory a name.'),
+  country: z.string().min(1, 'Please specify a country.'),
+  address: z.string().min(1, 'Please enter an address.'),
+  latitude: z.coerce
+    .number({ invalid_type_error: 'Enter a valid number.' })
+    .min(-90, 'Latitude must be >= -90.')
+    .max(90, 'Latitude must be <= 90.'),
+  longitude: z.coerce
+    .number({ invalid_type_error: 'Enter a valid number.' })
+    .min(-180, 'Longitude must be >= -180.')
+    .max(180, 'Longitude must be <= 180.'),
+  yearlyRevenue: z.coerce
+    .number({ invalid_type_error: 'Enter a valid number.' })
+    .positive('Revenue must be greater than 0.'),
+});
+
+type FactoryFormValues = z.infer<typeof factorySchema>;
+
+const initialValues: FactoryFormValues = {
+  name: '',
+  country: '',
+  address: '',
+  latitude: 0,
+  longitude: 0,
+  yearlyRevenue: 0,
+};
 
 async function createFactory(factory: IFactory) {
-  const options = {
+  const response = await fetch('http://localhost:3000/factories', {
     method: 'POST',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json;charset=UTF-8',
     },
     body: JSON.stringify(factory),
-  };
-  const response = await fetch('http://localhost:3000/factories', options);
-  const data = await response.json();
-  return data;
+  });
+  return response.json();
 }
 
 export function AddFactoryForm() {
-  const {
-    register,
-    formState: { errors },
-    handleSubmit,
-  } = useForm<IFactory>();
-
   const [formError, setFormError] = useState('');
-
   const [formSuccess, setFormSuccess] = useState(false);
 
-  if (formSuccess) {
-    return <Navigate to="/factories" />;
-  }
-
-  const onSubmit: SubmitHandler<IFactory> = async (data) => {
-    try {
-      createFactory(data);
-      setFormSuccess(true);
-    } catch (e: unknown) {
-      console.log(e);
-      setFormError('An error has occurred.');
-    }
-  };
+  if (formSuccess) return <Navigate to="/factories" />;
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} action="#">
-      {formError && <p role="alert">An error occurred : {formError}</p>}
-      {errors.factoryName && <p role="alert">{errors.factoryName.message}</p>}
-      <label>
-        Factory name :{' '}
-        <input
-          {...register('factoryName', {
-            required: 'Please give the factory a name.',
-          })}
-        />
-      </label>
-      {errors.country && <p role="alert">{errors.country.message}</p>}
-      <label>
-        Country :{' '}
-        <input
-          {...register('country', { required: 'Please specify a country.' })}
-        />
-      </label>
+    <Formik
+      initialValues={initialValues}
+      validationSchema={toFormikValidationSchema(factorySchema)}
+      onSubmit={async (values, { setSubmitting }) => {
+        try {
+          await createFactory(values);
+          setFormSuccess(true);
+        } catch (err) {
+          setFormError('An error has occurred.');
+        } finally {
+          setSubmitting(false);
+        }
+      }}
+    >
+      {({ isSubmitting, isValid, errors, touched }) => (
+        <Form noValidate>
+          <Box display="flex" flexDirection="column" gap={2} maxWidth={400}>
+            {formError && <Typography color="error">{formError}</Typography>}
 
-      {errors.address && <p role="alert">{errors.address.message}</p>}
-      <label>
-        Address :{' '}
-        <input
-          {...register('address', { required: 'Please enter an address.' })}
-        />
-      </label>
+            <Field name="name">
+              {({ field }: FieldProps) => (
+                <TextField
+                  {...field}
+                  label="Factory Name"
+                  error={touched.name && !!errors.name}
+                  helperText={touched.name && errors.name}
+                  fullWidth
+                />
+              )}
+            </Field>
 
-      {errors.latitude && <p role="alert">{errors.latitude.message}</p>}
-      <label>
-        Latitude :{' '}
-        <input
-          type="text"
-          {...register('latitude', {
-            required: 'This field is required.',
-            pattern: {
-              value: /^(-)?(0|[1-9]\d*)(\.\d+)?$/,
-              message: 'Please enter a valid latitude (-90...90).',
-            },
-            validate: {
-              bounds: (value) =>
-                (+value <= 90 && +value >= -90) ||
-                'Please enter a valid latitude (-90...90).',
-            },
-          })}
-        />
-      </label>
+            <Field name="country">
+              {({ field }: FieldProps) => (
+                <TextField
+                  {...field}
+                  label="Country"
+                  error={touched.country && !!errors.country}
+                  helperText={touched.country && errors.country}
+                  fullWidth
+                />
+              )}
+            </Field>
 
-      {errors.longitude && <p role="alert">{errors.longitude.message}</p>}
-      <label>
-        Longitude :{' '}
-        <input
-          type="text"
-          {...register('longitude', {
-            required: 'This field is required.',
-            pattern: {
-              value: /^(-)?(0|[1-9]\d*)(\.\d+)?$/,
-              message: 'Please enter a valid longitude (-180...180).',
-            },
-            validate: {
-              bounds: (value) =>
-                (+value <= 180 && +value >= -180) ||
-                'Please enter a valid longitude (-180...180).',
-            },
-          })}
-        />
-      </label>
+            <Field name="address">
+              {({ field }: FieldProps) => (
+                <TextField
+                  {...field}
+                  label="Address"
+                  error={touched.address && !!errors.address}
+                  helperText={touched.address && errors.address}
+                  fullWidth
+                />
+              )}
+            </Field>
 
-      {errors.yearlyRevenue && (
-        <p role="alert">{errors.yearlyRevenue.message}</p>
+            <Field name="latitude">
+              {({ field }: FieldProps) => (
+                <TextField
+                  {...field}
+                  label="Latitude"
+                  type="number"
+                  error={touched.latitude && !!errors.latitude}
+                  helperText={touched.latitude && errors.latitude}
+                  fullWidth
+                />
+              )}
+            </Field>
+
+            <Field name="longitude">
+              {({ field }: FieldProps) => (
+                <TextField
+                  {...field}
+                  label="Longitude"
+                  type="number"
+                  error={touched.longitude && !!errors.longitude}
+                  helperText={touched.longitude && errors.longitude}
+                  fullWidth
+                />
+              )}
+            </Field>
+
+            <Field name="yearlyRevenue">
+              {({ field }: FieldProps) => (
+                <TextField
+                  {...field}
+                  label="Yearly Revenue"
+                  type="number"
+                  error={touched.yearlyRevenue && !!errors.yearlyRevenue}
+                  helperText={touched.yearlyRevenue && errors.yearlyRevenue}
+                  fullWidth
+                />
+              )}
+            </Field>
+
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              disabled={!isValid || isSubmitting}
+            >
+              Add
+            </Button>
+          </Box>
+        </Form>
       )}
-      <label>
-        Yearly revenue :{' '}
-        <input
-          type="text"
-          {...register('yearlyRevenue', {
-            required: 'This field is required.',
-            min: 1,
-            pattern: {
-              value: /^(0|[1-9]\d*)(\.\d+)?$/,
-              message: 'Please enter a valid amount.',
-            },
-          })}
-        />
-      </label>
-
-      <input type="submit" value="Add" />
-    </form>
+    </Formik>
   );
 }

@@ -1,7 +1,0 @@
-#sidebar {
-  grid-area: sidebar;
-  height: 100vh;
-  padding: .5rem;
-  text-align: center;
-  background-color: rgb(44, 112, 62);
-}

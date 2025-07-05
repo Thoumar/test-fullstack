@@ -1,0 +1,6 @@
+.container {
+  grid-area: container;
+  padding: 1.5rem 4rem;
+  overflow: hidden;
+  display: flex;
+}

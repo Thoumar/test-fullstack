@@ -1,13 +1,82 @@
+import { createTheme } from '@mui/material/styles';
+import FactoryRoundedIcon from '@mui/icons-material/FactoryRounded';
+import AddRoundedIcon from '@mui/icons-material/AddRounded';
+import { AppProvider, type Navigation } from '@toolpad/core/AppProvider';
+import { DashboardLayout } from '@toolpad/core/DashboardLayout';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Container } from './Container';
-import { SideBar } from './SideBar';
+import logoUrl from '../assets/logo.png';
 
-import './Wrapper.css';
+const NAVIGATION: Navigation = [
+  {
+    kind: 'header',
+    title: 'Pages',
+  },
+  {
+    segment: 'factories',
+    title: 'Factories',
+    icon: <FactoryRoundedIcon />,
+  },
+  {
+    kind: 'divider',
+  },
+  {
+    kind: 'header',
+    title: 'Actions',
+  },
+  {
+    segment: 'add',
+    title: 'Add Factory',
+    icon: <AddRoundedIcon />,
+  },
+];
+
+const theme = createTheme({
+  cssVariables: {
+    colorSchemeSelector: 'data-toolpad-color-scheme',
+  },
+  colorSchemes: { light: true, dark: true },
+  breakpoints: {
+    values: {
+      xs: 0,
+      sm: 600,
+      md: 600,
+      lg: 1200,
+      xl: 1536,
+    },
+  },
+});
 
 export function Wrapper() {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const router = {
+    pathname: location.pathname,
+    searchParams: new URLSearchParams(location.search),
+    navigate: (path: string | URL) => {
+      if (typeof path === 'string') {
+        navigate(path);
+      } else {
+        navigate(path.pathname + path.search);
+      }
+    },
+  };
+
   return (
-    <div id="wrapper">
-      <SideBar />
-      <Container />
-    </div>
+    <AppProvider
+      navigation={NAVIGATION}
+      theme={theme}
+      branding={{
+        logo: <img src={logoUrl} alt="MUI logo" />,
+        title: 'Climadex',
+        homeUrl: '/factories',
+      }}
+      router={router}
+    >
+      <DashboardLayout>
+        <Container />
+      </DashboardLayout>
+    </AppProvider>
   );
 }
