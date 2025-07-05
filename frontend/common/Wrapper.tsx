@@ -3,9 +3,9 @@ import FactoryRoundedIcon from '@mui/icons-material/FactoryRounded';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import { AppProvider, type Navigation } from '@toolpad/core/AppProvider';
 import { DashboardLayout } from '@toolpad/core/DashboardLayout';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { Container } from './Container';
+import { useNavigate, useLocation, Outlet } from 'react-router-dom';
 import logoUrl from '../assets/logo.png';
+import { Box } from '@mui/material';
 
 const NAVIGATION: Navigation = [
   {
@@ -73,11 +73,11 @@ export function Wrapper() {
         homeUrl: '/factories',
       }}
       router={router}
-      defaultSidebarCollapsed
-      sidebarExpandedWidth={140}
     >
-      <DashboardLayout>
-        <Container />
+      <DashboardLayout defaultSidebarCollapsed sidebarExpandedWidth={240}>
+        <Box sx={{ display: 'flex', overflow: 'hidden' }}>
+          <Outlet />
+        </Box>
       </DashboardLayout>
     </AppProvider>
   );
