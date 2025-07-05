@@ -100,11 +100,19 @@ export function FactoriesTable({ filterString }: { filterString: string }) {
 
   return (
     <DataGrid
-      className="datagrid"
+      className={styles.factoriesTable}
       rows={factories.map(factoryToRowMapper)}
       columns={columns}
       density="compact"
       loading={isLoading}
+      sx={{
+        '& .MuiDataGrid-cell:focus': {
+          outline: 'none',
+        },
+        '& .MuiDataGrid-columnHeader:focus': {
+          outline: 'none',
+        },
+      }}
       slotProps={{
         loadingOverlay: {
           variant: 'skeleton',

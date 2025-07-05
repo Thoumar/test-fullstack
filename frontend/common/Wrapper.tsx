@@ -68,11 +68,13 @@ export function Wrapper() {
       navigation={NAVIGATION}
       theme={theme}
       branding={{
-        logo: <img src={logoUrl} alt="MUI logo" />,
+        logo: <img src={logoUrl} alt="Climadex Logo" />,
         title: 'Climadex',
         homeUrl: '/factories',
       }}
       router={router}
+      defaultSidebarCollapsed
+      sidebarExpandedWidth={140}
     >
       <DashboardLayout>
         <Container />
