@@ -1,9 +1,10 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "outDir": "../dist/out-tsc",
+    "outDir": "./dist",
     "module": "commonjs",
-    "types": ["node"]
+    "types": ["node"],
+    "noEmitOnError": false
   },
   "exclude": ["vite.config.mts", "src/**/*.spec.ts", "src/**/*.test.ts"],
   "include": ["src/**/*.ts"]

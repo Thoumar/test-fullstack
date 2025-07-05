@@ -22,7 +22,7 @@ ChartJS.register(
   Legend
 );
 
-export const RiskLineChart = ({ chartData }) => {
+export const RiskLineChart = ({ chartData }: any) => {
   const chartRef = useRef<ChartJS<'line', (number | null)[], string>>(null);
 
   useEffect(() => {
