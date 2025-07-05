@@ -228,26 +228,28 @@ export function ReportPage() {
               mt: 1,
             }}
           >
-            {Object.entries(factory.riskData).map(([timeframe, riskValue]) => (
-              <Paper
-                elevation={0}
-                key={timeframe}
-                sx={{
-                  p: 2,
-                  textAlign: 'center',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: 1,
-                  height: '100%',
-                }}
-              >
-                <Typography variant="h6" component="h4">
-                  {timeframe}
-                </Typography>
-                <RiskDisplay temperature={riskValue} />
-                <Typography variant="body2">{riskValue}°C</Typography>
-              </Paper>
-            ))}
+            {Object.entries(factory.riskData).map(
+              ([timeframe, riskValue]: any) => (
+                <Paper
+                  elevation={0}
+                  key={timeframe}
+                  sx={{
+                    p: 2,
+                    textAlign: 'center',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: 1,
+                    height: '100%',
+                  }}
+                >
+                  <Typography variant="h6" component="h4">
+                    {timeframe}
+                  </Typography>
+                  <RiskDisplay temperature={riskValue} />
+                  <Typography variant="body2">{riskValue}°C</Typography>
+                </Paper>
+              )
+            )}
           </Box>
         </Box>
       )}

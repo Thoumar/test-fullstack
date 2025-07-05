@@ -1,2 +1,2 @@
 export { TIMEFRAMES } from './constants';
-export type { Factory as IFactory, TimeFrame } from './types';
+export type { IDbFactory, Factory as IFactory, TimeFrame } from '../types';

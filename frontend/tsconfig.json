@@ -3,7 +3,21 @@
     "jsx": "react-jsx",
     "allowJs": false,
     "types": ["vite/client", "node"],
-    "baseUrl": "../"
+    "baseUrl": "../",
+    "paths": {
+      "@climadex/shared": ["shared/src/index.ts"],
+      "@climadex/shared/*": ["shared/src/*"],
+      "services": ["frontend/src/services/index.ts"],
+      "services/*": ["frontend/src/services/*"],
+      "hooks": ["frontend/src/hooks/index.ts"],
+      "hooks/*": ["frontend/src/hooks/*"],
+      "components": ["frontend/src/components/index.ts"],
+      "components/*": ["frontend/src/components/*"],
+      "pages": ["frontend/src/pages/index.ts"],
+      "pages/*": ["frontend/src/pages/*"],
+      "common": ["frontend/src/common/index.ts"],
+      "common/*": ["frontend/src/common/*"]
+    }
   },
   "files": [],
   "include": ["./**/*.ts", "./**/*.tsx", "./**/*.d.ts"],

@@ -1,4 +1,4 @@
-import { TIMEFRAMES } from './constants';
+import { TIMEFRAMES } from './src/constants';
 
 export interface Factory {
   id?: string;
