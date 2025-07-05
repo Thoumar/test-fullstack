@@ -3,9 +3,9 @@ import { useEffect, useState } from 'react';
 import './FactoriesTable.css';
 
 import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
+import { SparkLineChart } from '@mui/x-charts/SparkLineChart';
 
 import { IFactory, TIMEFRAMES, TimeFrame } from '@climadex/shared';
-import { RiskLevelCell } from '../../components/RiskLevelCell';
 
 async function fetchFactories({
   filterString,
@@ -24,6 +24,32 @@ async function fetchFactories({
   return json;
 }
 
+function renderSparklineCell(params: GridRenderCellParams) {
+  const { value, colDef } = params;
+
+  if (!value || value.length === 0) {
+    return null;
+  }
+
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', height: '100%' }}>
+      <SparkLineChart
+        data={value}
+        width={colDef.computedWidth || 100}
+        height={32}
+        plotType="bar"
+        showHighlight
+        showTooltip
+        color="hsl(210, 98%, 42%)"
+        xAxis={{
+          scaleType: 'band',
+          data: TIMEFRAMES,
+        }}
+      />
+    </div>
+  );
+}
+
 const columns: GridColDef[] = [
   { field: 'name', headerName: 'Factory name', flex: 1 },
   { field: 'address', headerName: 'Address', flex: 1 },
@@ -36,16 +62,12 @@ const columns: GridColDef[] = [
     type: 'number',
     flex: 1,
   },
-  ...TIMEFRAMES.map(
-    (timeframe: TimeFrame): GridColDef => ({
-      field: `riskLevel${timeframe}`,
-      headerName: `Risk level for ${timeframe}`,
-      flex: 1,
-      renderCell: (params: GridRenderCellParams) => (
-        <RiskLevelCell params={params} />
-      ),
-    })
-  ),
+  {
+    field: 'riskLevels',
+    headerName: 'Risk Levels',
+    flex: 1,
+    renderCell: renderSparklineCell,
+  },
   {
     field: 'report',
     headerName: 'Report',
@@ -66,10 +88,7 @@ const factoryToRowMapper = (factory: IFactory) => ({
   latitude: factory.latitude,
   longitude: factory.longitude,
   yearlyRevenue: factory.yearlyRevenue,
-  riskLevel2030: factory.riskData?.['2030'] ?? 'No data',
-  riskLevel2050: factory.riskData?.['2050'] ?? 'No data',
-  riskLevel2070: factory.riskData?.['2070'] ?? 'No data',
-  riskLevel2090: factory.riskData?.['2090'] ?? 'No data',
+  riskLevels: TIMEFRAMES.map((timeframe) => factory.riskData?.[timeframe] ?? 0),
 });
 
 export function FactoriesTable({ filterString }: { filterString: string }) {
@@ -84,6 +103,7 @@ export function FactoriesTable({ filterString }: { filterString: string }) {
       className="datagrid"
       rows={factories.map(factoryToRowMapper)}
       columns={columns}
+      // density="compact"
     />
   );
 }
