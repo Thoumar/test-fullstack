@@ -49,7 +49,6 @@
                 "groupName": "react-router-dom",
                 "elementNamePattern": "^react-router-dom$"
               },
-              // target @climadex and @climadex/* packages
               {
                 "groupName": "climadex",
                 "elementNamePattern": "^@climadex(\\/.*)?$"
