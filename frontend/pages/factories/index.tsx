@@ -9,12 +9,17 @@ export function FactoriesPage() {
   const [filterString, setFilterString] = useState('');
 
   return (
-    <div id="main">
-      <div id="header">
-        <h1>My factories</h1>
-        <Link to={'/add'}>Add</Link>
+    <div className="main">
+      <div className="header">
+        <div className="left">
+          <h1>Overview</h1>
+        </div>
+        <div className="right">
+          <Searchbar onSearch={setFilterString} />
+          <Link to={'/add'}>Add</Link>
+        </div>
       </div>
-      <Searchbar onSearch={setFilterString} />
+
       <FactoriesTable filterString={filterString} />
     </div>
   );

@@ -81,7 +81,7 @@ export function FactoriesTable({ filterString }: { filterString: string }) {
 
   return (
     <DataGrid
-      className="data-grid"
+      className="datagrid"
       rows={factories.map(factoryToRowMapper)}
       columns={columns}
     />

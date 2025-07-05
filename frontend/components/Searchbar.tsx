@@ -1,4 +1,7 @@
+import { IconButton, InputBase } from '@mui/material';
 import { debounce } from 'lodash';
+
+import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
 
 type SearchbarProps = {
   onSearch: (value: string) => void;
@@ -12,11 +15,15 @@ export const Searchbar = ({ onSearch }: SearchbarProps) => {
 
   return (
     <div className="searchbar">
-      <input
-        type="text"
+      <InputBase
+        sx={{ ml: 1, flex: 1 }}
         placeholder="Search factories..."
+        inputProps={{ 'aria-label': 'search factories' }}
         onChange={handleChange}
       />
+      <IconButton type="button" sx={{ p: '10px' }} aria-label="search">
+        <SearchRoundedIcon />
+      </IconButton>
     </div>
   );
 };
