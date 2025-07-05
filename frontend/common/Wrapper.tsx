@@ -1,11 +1,14 @@
-import { createTheme } from '@mui/material/styles';
-import FactoryRoundedIcon from '@mui/icons-material/FactoryRounded';
-import AddRoundedIcon from '@mui/icons-material/AddRounded';
-import { AppProvider, type Navigation } from '@toolpad/core/AppProvider';
-import { DashboardLayout } from '@toolpad/core/DashboardLayout';
 import { useNavigate, useLocation, Outlet } from 'react-router-dom';
-import logoUrl from '../assets/logo.png';
+
+import { DashboardLayout } from '@toolpad/core/DashboardLayout';
+import { AppProvider, type Navigation } from '@toolpad/core/AppProvider';
+
 import { Box } from '@mui/material';
+import { createTheme } from '@mui/material/styles';
+import AddRoundedIcon from '@mui/icons-material/AddRounded';
+import FactoryRoundedIcon from '@mui/icons-material/FactoryRounded';
+
+import logoUrl from '../assets/logo.png';
 
 const NAVIGATION: Navigation = [
   {

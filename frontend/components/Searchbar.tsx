@@ -1,6 +1,6 @@
-import { IconButton, InputBase, Paper } from '@mui/material';
 import { debounce } from 'lodash';
 
+import { IconButton, InputBase, Paper } from '@mui/material';
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
 
 type SearchbarProps = {

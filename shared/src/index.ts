@@ -1,2 +1,2 @@
-export type { IFactory, TimeFrame } from './types';
 export { TIMEFRAMES } from './constants';
+export type { IFactory, TimeFrame } from './types';

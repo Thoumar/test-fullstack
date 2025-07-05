@@ -1,6 +1,6 @@
-import { TimeFrame } from '@climadex/shared';
-
 import gdal from 'gdal-async';
+
+import { TimeFrame } from '@climadex/shared';
 
 const wgs84 = gdal.SpatialReference.fromEPSG(4326);
 

@@ -1,9 +1,11 @@
 import { useState } from 'react';
-import { FactoriesTable } from './FactoriesTable';
+
+import { Box } from '@mui/material';
+
+import { Searchbar } from 'components';
 
 import styles from './index.module.css';
-import { Searchbar } from '../../components/Searchbar';
-import { Box } from '@mui/material';
+import { FactoriesTable } from './FactoriesTable';
 
 export function FactoriesPage() {
   const [filterString, setFilterString] = useState('');

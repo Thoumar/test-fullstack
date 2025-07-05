@@ -1,19 +1,19 @@
+import React from 'react';
 import * as ReactDOM from 'react-dom/client';
 
-import React from 'react';
 import {
-  createBrowserRouter,
   redirect,
   RouterProvider,
+  createBrowserRouter,
 } from 'react-router-dom';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import { FactoriesPage } from './pages/factories';
-import { Wrapper } from './common/Wrapper';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+
+import { Wrapper } from 'common';
+import { ReportPage, FactoriesPage, AddFactoryPage } from 'pages';
 
 import './main.css';
-import { AddFactoryPage } from './pages/add-factory';
-import { ReportPage } from './pages/report';
 
 const queryClient = new QueryClient({
   defaultOptions: {

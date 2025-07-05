@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { getFactories, addFactory } from '../services/factories';
+
+import { getFactories, addFactory } from 'services';
 
 export const useFactories = (filterString = '') => {
   const queryClient = useQueryClient();

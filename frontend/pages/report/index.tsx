@@ -8,8 +8,9 @@ import {
   CircularProgress,
   Alert,
 } from '@mui/material';
-import { RiskLineChart } from '../../components/RiskLineChart';
-import { useReport } from '../../hooks';
+
+import { useReport } from 'hooks';
+import { RiskLineChart } from 'components';
 
 const getRiskLevel = (temp: number): string => {
   if (temp > 30) return 'HIGH';

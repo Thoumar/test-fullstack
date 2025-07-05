@@ -1,12 +1,13 @@
-import styles from './FactoriesTable.module.css';
-
-import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
-import { SparkLineChart } from '@mui/x-charts/SparkLineChart';
-
 import { IFactory, TIMEFRAMES } from '@climadex/shared';
-import DescriptionRoundedIcon from '@mui/icons-material/DescriptionRounded';
+
 import { Box, Button } from '@mui/material';
-import { useFactories } from '../../hooks';
+import { SparkLineChart } from '@mui/x-charts/SparkLineChart';
+import DescriptionRoundedIcon from '@mui/icons-material/DescriptionRounded';
+import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
+
+import { useFactories } from 'hooks';
+
+import styles from './FactoriesTable.module.css';
 
 function renderSparklineCell(params: GridRenderCellParams) {
   const { value, colDef } = params;

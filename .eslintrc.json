@@ -1,17 +1,79 @@
 {
   "root": true,
   "ignorePatterns": ["!**/*"],
-  "plugins": ["@nx"],
+  "plugins": ["@nx", "perfectionist"],
   "overrides": [
     {
       "files": ["*.ts", "*.tsx"],
       "extends": ["plugin:@nx/typescript"],
-      "rules": {}
-    },
-    {
-      "files": ["*.js", "*.jsx"],
-      "extends": ["plugin:@nx/javascript"],
-      "rules": {}
+      "rules": {
+        "perfectionist/sort-array-includes": [
+          "error",
+          {
+            "type": "line-length",
+            "order": "asc",
+            "ignoreCase": true
+          }
+        ],
+        "perfectionist/sort-exports": [
+          "error",
+          {
+            "type": "line-length",
+            "order": "asc",
+            "ignoreCase": true
+          }
+        ],
+        "perfectionist/sort-imports": [
+          "error",
+          {
+            "type": "line-length",
+            "order": "asc",
+            "fallbackSort": { "type": "unsorted" },
+            "ignoreCase": true,
+            "groups": [
+              "react",
+              "react-router-dom",
+              "external",
+              "climadex",
+              "at",
+              "frontend",
+              "relative",
+              "styles"
+            ],
+            "customGroups": [
+              {
+                "groupName": "react",
+                "elementNamePattern": "^(react|react-dom|react-dom/client)$"
+              },
+              {
+                "groupName": "react-router-dom",
+                "elementNamePattern": "^react-router-dom$"
+              },
+              // target @climadex and @climadex/* packages
+              {
+                "groupName": "climadex",
+                "elementNamePattern": "^@climadex(\\/.*)?$"
+              },
+              {
+                "groupName": "at",
+                "elementNamePattern": "^@(mui|tanstack)"
+              },
+              {
+                "groupName": "frontend",
+                "elementNamePattern": "^(frontend|common|components|pages|hooks|services)"
+              },
+              {
+                "groupName": "relative",
+                "elementNamePattern": "^\\.{1,2}\\/.*"
+              },
+              {
+                "groupName": "styles",
+                "elementNamePattern": ".*\\.(css|scss|sass)$"
+              }
+            ]
+          }
+        ]
+      }
     }
   ],
   "extends": ["plugin:@nx/react"]

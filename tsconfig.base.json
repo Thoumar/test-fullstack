@@ -21,7 +21,17 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@climadex/shared": ["shared/src/index.ts"]
+      "@climadex/shared": ["shared/src/index.ts"],
+      "services": ["frontend/services/index.ts"],
+      "services/*": ["frontend/services/*"],
+      "hooks": ["frontend/hooks/index.ts"],
+      "hooks/*": ["frontend/hooks/*"],
+      "components": ["frontend/components/index.ts"],
+      "components/*": ["frontend/components/*"],
+      "pages": ["frontend/pages/index.ts"],
+      "pages/*": ["frontend/pages/*"],
+      "common": ["frontend/common/index.ts"],
+      "common/*": ["frontend/common/*"]
     },
     "allowSyntheticDefaultImports": true,
     "noImplicitReturns": true,

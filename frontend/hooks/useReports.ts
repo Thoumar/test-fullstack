@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
-import { getReport } from '../services/reports';
+
+import { getReport } from 'services';
 
 export const useReport = (id: string) => {
   const { data, isLoading, isError, error, refetch } = useQuery({

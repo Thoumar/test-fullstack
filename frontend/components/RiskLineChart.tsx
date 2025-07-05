@@ -1,4 +1,6 @@
 import { useEffect, useRef } from 'react';
+
+import { Line } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
   ArcElement,
@@ -9,7 +11,6 @@ import {
   PointElement,
   LineElement,
 } from 'chart.js';
-import { Line } from 'react-chartjs-2';
 
 ChartJS.register(
   ArcElement,

@@ -1,10 +1,14 @@
 import { useState } from 'react';
-import { Button, TextField, Box, Typography } from '@mui/material';
-import { Formik, Form, Field, FieldProps } from 'formik';
-import { z } from 'zod';
-import { toFormikValidationSchema } from 'zod-formik-adapter';
+
 import { Navigate } from 'react-router-dom';
-import { useFactories } from '../../hooks';
+
+import { z } from 'zod';
+import { Formik, Form, Field, FieldProps } from 'formik';
+import { toFormikValidationSchema } from 'zod-formik-adapter';
+
+import { Button, TextField, Box, Typography } from '@mui/material';
+
+import { useFactories } from 'hooks';
 
 import styles from './AddFactoryForm.module.css';
 

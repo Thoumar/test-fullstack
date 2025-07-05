@@ -1,5 +1,6 @@
-import { IFactory } from '@climadex/shared';
 import { Context } from 'hono';
+
+import { IFactory } from '@climadex/shared';
 
 export const addFactory = async (c: Context) => {
   const client = c.get('db');
