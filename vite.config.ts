@@ -32,6 +32,11 @@ export default defineConfig({
   resolve: {
     alias: {
       '@climadex/shared': path.resolve(__dirname, 'shared/src'),
+      services: path.resolve(__dirname, 'frontend/src/services'),
+      hooks: path.resolve(__dirname, 'frontend/src/hooks'),
+      components: path.resolve(__dirname, 'frontend/src/components'),
+      pages: path.resolve(__dirname, 'frontend/src/pages'),
+      common: path.resolve(__dirname, 'frontend/src/common'),
     },
   },
 
