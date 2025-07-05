@@ -1,29 +1,11 @@
-import { useEffect, useState } from 'react';
-
-import './FactoriesTable.css';
+import styles from './FactoriesTable.module.css';
 
 import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
 import { SparkLineChart } from '@mui/x-charts/SparkLineChart';
 
 import { IFactory, TIMEFRAMES } from '@climadex/shared';
-import { Button } from '@mui/material';
-
-async function fetchFactories({
-  filterString,
-}: {
-  filterString: string;
-}): Promise<IFactory[]> {
-  const url =
-    filterString === ''
-      ? 'http://localhost:3000/factories'
-      : `http://localhost:3000/factories?q=${filterString}`;
-
-  const response = await fetch(url);
-
-  const json = await response.json();
-
-  return json;
-}
+import { Box, Button } from '@mui/material';
+import { useFactories } from '../../hooks';
 
 function renderSparklineCell(params: GridRenderCellParams) {
   const { value, colDef } = params;
@@ -33,7 +15,7 @@ function renderSparklineCell(params: GridRenderCellParams) {
   }
 
   return (
-    <div style={{ display: 'flex', alignItems: 'center', height: '100%' }}>
+    <Box className={styles.arrayCell}>
       <SparkLineChart
         data={value}
         width={colDef.computedWidth || 100}
@@ -47,7 +29,7 @@ function renderSparklineCell(params: GridRenderCellParams) {
           data: TIMEFRAMES,
         }}
       />
-    </div>
+    </Box>
   );
 }
 
@@ -99,11 +81,20 @@ const factoryToRowMapper = (factory: IFactory) => ({
 });
 
 export function FactoriesTable({ filterString }: { filterString: string }) {
-  const [factories, setFactories] = useState<IFactory[]>([]);
+  const {
+    data: factories,
+    isLoading,
+    isError,
+    error,
+  } = useFactories(filterString);
 
-  useEffect(() => {
-    fetchFactories({ filterString }).then((json) => setFactories(json));
-  }, [filterString]);
+  if (isError) {
+    return (
+      <Box sx={{ p: 2, textAlign: 'center' }}>
+        <p>Error loading factories: {error?.message}</p>
+      </Box>
+    );
+  }
 
   return (
     <DataGrid
@@ -111,7 +102,7 @@ export function FactoriesTable({ filterString }: { filterString: string }) {
       rows={factories.map(factoryToRowMapper)}
       columns={columns}
       density="compact"
-      loading={factories.length === 0}
+      loading={isLoading}
       slotProps={{
         loadingOverlay: {
           variant: 'skeleton',
