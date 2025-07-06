@@ -1,6 +1,6 @@
 import { Context } from 'hono';
 
-import { IDbFactory, IFactory, TimeFrame, TIMEFRAMES } from '@climadex/shared';
+import { IDbFactory, Factory, TimeFrame, TIMEFRAMES } from '@climadex/shared';
 
 import { getFactoriesQuerySchema } from '../validation/schemas';
 import { getMeanTemperatureWarmestQuarter } from '../indicators';
@@ -27,7 +27,7 @@ export const getFactories = async (c: Context) => {
     : await client.all('SELECT * FROM factories');
 
   return c.json(
-    factories.map((factory: IDbFactory): IFactory => {
+    factories.map((factory: IDbFactory): Factory => {
       const riskData: Record<TimeFrame, number> = {
         '2030': 0,
         '2050': 0,
@@ -61,7 +61,7 @@ export const getFactories = async (c: Context) => {
           '2070': riskData['2070'],
           '2090': riskData['2090'],
         },
-      } as IFactory;
+      } as Factory;
     })
   );
 };

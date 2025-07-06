@@ -8,7 +8,7 @@ import { createTheme } from '@mui/material/styles';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import FactoryRoundedIcon from '@mui/icons-material/FactoryRounded';
 
-import logoUrl from '../assets/logo.png';
+import logoUrl from '../../assets/logo.png';
 
 const NAVIGATION: Navigation = [
   {

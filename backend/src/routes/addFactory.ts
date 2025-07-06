@@ -1,44 +1,32 @@
 import { Context } from 'hono';
 
-import { IFactory } from '@climadex/shared';
+import { Factory } from '@climadex/shared';
 
+import { DatabaseAdapter } from '../adapters/db';
+import { FactoryAdapter } from '../adapters/factory';
 import { addFactorySchema } from '../validation/schemas';
+import { validateRequest } from '../validation/validate';
 
-export const addFactory = async (c: Context) => {
-  const client = c.get('db');
+export const addFactory = async (context: Context) => {
+  try {
+    const body = await context.req.json();
 
-  const body = await c.req.json();
+    const validation = validateRequest<Factory>(addFactorySchema, body);
+    if (validation.data === undefined || !validation.success) {
+      return context.json(
+        { error: 'Invalid request body', details: validation.errors },
+        400
+      );
+    }
 
-  const validation = addFactorySchema.safeParse(body);
-  if (!validation.success) {
-    return c.json(
-      { error: 'Invalid request body', details: validation.error.errors },
-      400
-    );
+    const dbClient = DatabaseAdapter.getClient(context);
+    const factoryAdapter = new FactoryAdapter(dbClient);
+
+    const factoryData: Factory = validation.data;
+    await factoryAdapter.create(factoryData);
+
+    return context.json({ result: 'OK' });
+  } catch (error) {
+    return context.json({ error: 'Internal server error' }, 500);
   }
-
-  const { name, country, address, latitude, longitude, yearlyRevenue } =
-    validation.data;
-
-  const factory: IFactory = {
-    name,
-    country,
-    address,
-    latitude,
-    longitude,
-    yearlyRevenue,
-  };
-
-  await client.run(
-    `INSERT INTO factories (factory_name, address, country, latitude, longitude, yearly_revenue)
-VALUES (?, ?, ?, ?, ?, ?);`,
-    factory.name,
-    factory.address,
-    factory.country,
-    factory.latitude,
-    factory.longitude,
-    factory.yearlyRevenue
-  );
-
-  return c.json({ result: 'OK' });
 };
