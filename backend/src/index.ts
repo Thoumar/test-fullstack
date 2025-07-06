@@ -1,11 +1,10 @@
 import { Hono } from 'hono';
 import { cors } from 'hono/cors';
+
 import { serve } from '@hono/node-server';
 
-import { getReport } from './routes/getReport';
-import { dbMiddleware } from './middlewares/db';
-import { addFactory } from './routes/addFactory';
-import { getFactories } from './routes/getFactories';
+import { dbMiddleware } from 'middlewares';
+import { addFactory, getReport, getFactories } from 'routes';
 
 const app = new Hono();
 

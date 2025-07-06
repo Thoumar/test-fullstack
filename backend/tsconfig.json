@@ -14,7 +14,17 @@
     "esModuleInterop": true,
     "paths": {
       "@climadex/shared": ["shared/src/index.ts"],
-      "@climadex/shared/*": ["shared/src/*"]
+      "@climadex/shared/*": ["shared/src/*"],
+      "adapters": ["backend/src/adapters/index.ts"],
+      "adapters/*": ["backend/src/adapters/*"],
+      "routes": ["backend/src/routes/index.ts"],
+      "routes/*": ["backend/src/routes/*"],
+      "middlewares": ["backend/src/middlewares/index.ts"],
+      "middlewares/*": ["backend/src/middlewares/*"],
+      "validation": ["backend/src/validation/index.ts"],
+      "validation/*": ["backend/src/validation/*"],
+      "utils": ["backend/src/utils/index.ts"],
+      "utils/*": ["backend/src/utils/*"]
     }
   }
 }

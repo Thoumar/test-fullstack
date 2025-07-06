@@ -1,10 +1,12 @@
 import { Context } from 'hono';
 
-import { DatabaseAdapter } from '../adapters/db';
-import { FactoryAdapter } from '../adapters/factory';
-import { validateRequest } from '../validation/validate';
-import { generateReport } from '../utils/generateReport';
-import { GetReportParams, getReportParamsSchema } from '../validation/schemas';
+import { generateReport } from 'utils';
+import { DatabaseAdapter, FactoryAdapter } from 'adapters';
+import {
+  validateRequest,
+  GetReportParams,
+  getReportParamsSchema,
+} from 'validation';
 
 export const getReport = async (context: Context) => {
   try {

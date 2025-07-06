@@ -1,6 +1,6 @@
 import { TimeFrame, TIMEFRAMES } from '@climadex/shared';
 
-import { getMeanTemperatureWarmestQuarter } from '../indicators';
+import { getMeanTemperatureWarmestQuarter } from './indicators';
 
 type CalculateRiskParams = {
   latitude: number;

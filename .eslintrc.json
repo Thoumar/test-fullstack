@@ -55,11 +55,11 @@
               },
               {
                 "groupName": "at",
-                "elementNamePattern": "^@(mui|tanstack)"
+                "elementNamePattern": "^@(mui|tanstack|hono)"
               },
               {
                 "groupName": "frontend",
-                "elementNamePattern": "^(frontend|common|components|pages|hooks|services)"
+                "elementNamePattern": "^(frontend|common|components|pages|hooks|services|adapters|routes|utils|middlewares|validation)(\\/.*)?$"
               },
               {
                 "groupName": "relative",

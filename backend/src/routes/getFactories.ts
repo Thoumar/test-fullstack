@@ -2,13 +2,12 @@ import { Context } from 'hono';
 
 import { Factory } from '@climadex/shared';
 
-import { DatabaseAdapter } from '../adapters/db';
-import { FactoryAdapter } from '../adapters/factory';
-import { validateRequest } from '../validation/validate';
+import { FactoryAdapter, DatabaseAdapter } from 'adapters';
 import {
+  validateRequest,
   GetFactoriesQuery,
   getFactoriesQuerySchema,
-} from '../validation/schemas';
+} from 'validation';
 
 export const getFactories = async (context: Context) => {
   try {
