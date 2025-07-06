@@ -1,67 +1,42 @@
 import { Context } from 'hono';
 
-import { IDbFactory, Factory, TimeFrame, TIMEFRAMES } from '@climadex/shared';
+import { Factory } from '@climadex/shared';
 
-import { getFactoriesQuerySchema } from '../validation/schemas';
-import { getMeanTemperatureWarmestQuarter } from '../indicators';
+import { DatabaseAdapter } from '../adapters/db';
+import { FactoryAdapter } from '../adapters/factory';
+import { validateRequest } from '../validation/validate';
+import {
+  GetFactoriesQuery,
+  getFactoriesQuerySchema,
+} from '../validation/schemas';
 
-export const getFactories = async (c: Context) => {
-  const client = c.get('db');
+export const getFactories = async (context: Context) => {
+  try {
+    const queryParams = { q: context.req.query('q') };
 
-  const queryParams = { q: c.req.query('q') };
-  const validation = getFactoriesQuerySchema.safeParse(queryParams);
-  if (!validation.success) {
-    return c.json(
-      { error: 'Invalid query parameters', details: validation.error.errors },
-      400
+    const validation = validateRequest<GetFactoriesQuery>(
+      getFactoriesQuerySchema,
+      queryParams
     );
+    if (validation.data === undefined || !validation.success) {
+      return context.json(
+        { error: 'Invalid query parameters', details: validation.errors },
+        400
+      );
+    }
+
+    const dbClient = DatabaseAdapter.getClient(context);
+    const factoryAdapter = new FactoryAdapter(dbClient);
+
+    const name = validation.data.q?.trim().toLowerCase();
+    if (name) {
+      const factories = await factoryAdapter.findByName(name);
+      return context.json(factories);
+    }
+
+    const factories = await factoryAdapter.findAll();
+    return context.json<Factory[]>(factories);
+  } catch (error) {
+    return context.json({ error: 'Internal server error' }, 500);
   }
-
-  const { q: query } = validation.data;
-
-  const factories = query
-    ? await client.all(
-        `SELECT * FROM factories WHERE LOWER( factory_name ) LIKE ?;`,
-        [`%${query.toLowerCase()}%`]
-      )
-    : await client.all('SELECT * FROM factories');
-
-  return c.json(
-    factories.map((factory: IDbFactory): Factory => {
-      const riskData: Record<TimeFrame, number> = {
-        '2030': 0,
-        '2050': 0,
-        '2070': 0,
-        '2090': 0,
-      };
-
-      for (const timeframe of TIMEFRAMES) {
-        const temperature = getMeanTemperatureWarmestQuarter({
-          latitude: factory.latitude,
-          longitude: factory.longitude,
-          timeframe: timeframe as TimeFrame,
-        });
-
-        if (temperature !== null) {
-          riskData[timeframe] = temperature;
-        }
-      }
-
-      return {
-        id: factory.id,
-        name: factory.factory_name,
-        country: factory.country,
-        address: factory.address,
-        latitude: factory.latitude,
-        longitude: factory.longitude,
-        yearlyRevenue: factory.yearly_revenue,
-        riskData: {
-          '2030': riskData['2030'],
-          '2050': riskData['2050'],
-          '2070': riskData['2070'],
-          '2090': riskData['2090'],
-        },
-      } as Factory;
-    })
-  );
 };

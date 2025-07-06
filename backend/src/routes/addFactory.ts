@@ -4,8 +4,8 @@ import { Factory } from '@climadex/shared';
 
 import { DatabaseAdapter } from '../adapters/db';
 import { FactoryAdapter } from '../adapters/factory';
-import { addFactorySchema } from '../validation/schemas';
 import { validateRequest } from '../validation/validate';
+import { addFactorySchema } from '../validation/schemas';
 
 export const addFactory = async (context: Context) => {
   try {
