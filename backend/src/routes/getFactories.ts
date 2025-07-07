@@ -44,7 +44,26 @@ export const getFactories = async (context: Context) => {
     const name = searchQuery?.trim().toLowerCase();
     if (name) {
       const factories = await factoryAdapter.findByName(name);
-      return context.json(factories);
+      const total = factories.length;
+      const parsedPage = page ? parseInt(page, 10) : 1;
+      const parsedLimit = limit ? parseInt(limit, 10) : 20;
+
+      const startIndex = (parsedPage - 1) * parsedLimit;
+      const endIndex = startIndex + parsedLimit;
+      const paginatedFactories = factories.slice(startIndex, endIndex);
+      const totalPages = Math.ceil(total / parsedLimit);
+
+      return context.json({
+        data: paginatedFactories,
+        pagination: {
+          page: parsedPage,
+          limit: parsedLimit,
+          total,
+          totalPages,
+          hasNext: parsedPage < totalPages,
+          hasPrev: parsedPage > 1,
+        },
+      });
     }
 
     const parsedPage = page ? parseInt(page, 10) : undefined;
