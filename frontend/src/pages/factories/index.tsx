@@ -1,22 +1,13 @@
-import { useState } from 'react';
-
 import { Box } from '@mui/material';
 
-import { Searchbar } from 'components';
+import { FactoriesTable } from './table/FactoriesTable';
 
-import styles from './index.module.css';
-import { FactoriesTable } from './FactoriesTable';
+import styles from './index.module.sass';
 
 export function FactoriesPage() {
-  const [filterString, setFilterString] = useState('');
-
   return (
     <Box className={styles.page}>
-      <Box className={styles.header}>
-        <Searchbar onSearch={setFilterString} />
-      </Box>
-
-      <FactoriesTable filterString={filterString} />
+      <FactoriesTable />
     </Box>
   );
 }

@@ -62,12 +62,12 @@
                 "elementNamePattern": "^(frontend|common|components|pages|hooks|services|adapters|routes|utils|middlewares|validation)(\\/.*)?$"
               },
               {
-                "groupName": "relative",
-                "elementNamePattern": "^\\.{1,2}\\/.*"
-              },
-              {
                 "groupName": "styles",
                 "elementNamePattern": ".*\\.(css|scss|sass)$"
+              },
+              {
+                "groupName": "relative",
+                "elementNamePattern": "^(\\.{1,2}\\/.*|\\.\\/.*)$"
               }
             ]
           }

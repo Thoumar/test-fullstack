@@ -1,7 +1,8 @@
 import { Box } from '@mui/material';
 
-import styles from './index.module.css';
-import { AddFactoryForm } from './AddFactoryForm';
+import { AddFactoryForm } from './form/AddFactoryForm';
+
+import styles from './index.module.sass';
 
 export function AddFactoryPage() {
   return (

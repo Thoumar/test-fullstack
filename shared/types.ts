@@ -11,7 +11,7 @@ export interface Factory {
   riskData?: Record<TimeFrame, number>;
 }
 
-export interface IDbFactory {
+export interface DbFactory {
   id: string;
   factory_name: string;
   country: string;

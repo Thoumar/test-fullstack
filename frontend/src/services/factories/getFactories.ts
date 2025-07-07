@@ -1,12 +1,40 @@
-import { IFactory } from '@climadex/shared';
+import {
+  Factory,
+  FactoriesFilters,
+  FactoriesPagination,
+} from '@climadex/shared';
 
-const getFactories = async (filterString = ''): Promise<IFactory[]> => {
-  const url =
-    filterString === ''
-      ? 'http://localhost:3000/factories'
-      : `http://localhost:3000/factories?q=${filterString}`;
+import { createSearchParamsFromFiltersAndPagination } from 'utils';
 
-  const response = await fetch(url);
+export type GetFactoriesParams = {
+  filters?: FactoriesFilters;
+  pagination?: FactoriesPagination;
+};
+
+export type GetFactoriesResult = Promise<{
+  data: Factory[];
+  pagination: {
+    page: number;
+    limit: number;
+    total: number;
+    totalPages: number;
+    hasNext: boolean;
+    hasPrev: boolean;
+  };
+}>;
+
+export const getFactories = async ({
+  filters = {},
+  pagination = { page: 1, limit: 20 },
+}: GetFactoriesParams = {}): GetFactoriesResult => {
+  const url = `${import.meta.env.VITE_PUBLIC_API_URL}/factories`;
+
+  const searchParams = createSearchParamsFromFiltersAndPagination({
+    filters,
+    pagination,
+  });
+
+  const response = await fetch(`${url}?${searchParams.toString()}`);
 
   if (!response.ok) {
     throw new Error(`Failed to fetch factories: ${response.statusText}`);
@@ -14,5 +42,3 @@ const getFactories = async (filterString = ''): Promise<IFactory[]> => {
 
   return response.json();
 };
-
-export { getFactories };

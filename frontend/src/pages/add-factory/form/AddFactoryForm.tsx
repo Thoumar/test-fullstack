@@ -10,7 +10,7 @@ import { Button, TextField, Box, Typography } from '@mui/material';
 
 import { useFactories } from 'hooks';
 
-import styles from './AddFactoryForm.module.css';
+import styles from './AddFactoryForm.module.sass';
 
 const factorySchema = z.object({
   name: z.string().min(1, 'Please give the factory a name.'),
@@ -54,7 +54,7 @@ export function AddFactoryForm() {
       onSubmit={async (values, { setSubmitting }) => {
         try {
           setFormError('');
-          await addFactory.mutateAsync(values);
+          await addFactory.mutate(values);
           setFormSuccess(true);
         } catch (err) {
           setFormError(addFactory.error?.message || 'An error has occurred.');

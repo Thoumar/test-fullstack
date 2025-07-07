@@ -1,7 +1,14 @@
-import { IFactory } from '@climadex/shared';
+import { Factory } from '@climadex/shared';
 
-export const getReport = async (id: string): Promise<IFactory> => {
-  const response = await fetch(`http://localhost:3000/reports/${id}`);
+type GetReportParams = {
+  id: string;
+};
+
+type GetReportResult = Promise<Factory>;
+
+export const getReport = async ({ id }: GetReportParams): GetReportResult => {
+  const url = `${import.meta.env.VITE_PUBLIC_API_URL}/reports/${id}`;
+  const response = await fetch(url);
 
   if (!response.ok) {
     throw new Error(`Failed to fetch factory report: ${response.statusText}`);

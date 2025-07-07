@@ -6,7 +6,9 @@
     "start": "nx run-many --all --target=start",
     "dev": "nx run-many --all --target=serve",
     "build": "nx run-many --all --target=build",
-    "test": "nx test"
+    "lint": "nx run-many --all --target=lint",
+    "test": "nx test",
+    "reset": "sh ./tools/reset.sh"
   },
   "private": true,
   "dependencies": {
@@ -78,6 +80,7 @@
     "jsdom": "~22.1.0",
     "nx": "19.6.2",
     "prettier": "^2.6.2",
+    "sass-embedded": "^1.89.2",
     "typescript": "~5.5.2",
     "vite": "^5.0.0",
     "vitest": "^1.3.1"

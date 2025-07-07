@@ -9,9 +9,13 @@ export interface Factory {
   longitude: number;
   yearlyRevenue: number;
   riskData?: Record<TimeFrame, number>;
+  temperatureIncreases?: Record<TimeFrame, number>;
+  riskClassification?: 'HIGH' | 'MEDIUM' | 'LOW';
+  temperatureIncrease2090?: number;
+  worstTimeframe?: TimeFrame;
 }
 
-export interface IDbFactory {
+export interface DbFactory {
   id: string;
   factory_name: string;
   country: string;
@@ -19,4 +23,16 @@ export interface IDbFactory {
   latitude: number;
   longitude: number;
   yearly_revenue: number;
+}
+
+export interface FactoriesFilters {
+  search?: string;
+  country?: string;
+  minRevenue?: number;
+  maxRevenue?: number;
+}
+
+export interface FactoriesPagination {
+  page: number;
+  limit: number;
 }

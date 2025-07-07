@@ -25,7 +25,7 @@ export const getReport = async (context: Context) => {
 
     if (!factory) return context.json({ error: 'Factory not found' }, 404);
 
-    const report = generateReport(factory);
+    const report = await generateReport(factory);
 
     return context.json(report);
   } catch (error) {

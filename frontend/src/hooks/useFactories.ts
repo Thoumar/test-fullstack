@@ -1,21 +1,38 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { FactoriesFilters, FactoriesPagination } from '@climadex/shared';
 
-import { getFactories, addFactory } from 'services';
+import {
+  useQuery,
+  useMutation,
+  useQueryClient,
+  keepPreviousData,
+} from '@tanstack/react-query';
 
-export const useFactories = (filterString = '') => {
+import { getFactories, addFactory, PaginatedFactoriesResult } from 'services';
+
+export interface UseFactoriesOptions {
+  filters?: FactoriesFilters;
+  pagination?: FactoriesPagination;
+}
+
+const DEFAULT_PAGINATION: FactoriesPagination = {
+  page: 1,
+  limit: 20,
+};
+
+export const useFactories = (options: UseFactoriesOptions = {}) => {
   const queryClient = useQueryClient();
 
-  const {
-    data = [],
-    isLoading,
-    isError,
-    error,
-    refetch,
-  } = useQuery({
-    queryKey: ['factories', filterString],
-    queryFn: () => getFactories(filterString),
-    retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
-  });
+  const { filters = {}, pagination = DEFAULT_PAGINATION } = options;
+
+  const queryKey = ['factories', { filters, pagination }];
+
+  const { data, isLoading, isError, error, refetch } =
+    useQuery<PaginatedFactoriesResult>({
+      queryKey,
+      queryFn: () => getFactories({ filters, pagination }),
+      retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
+      placeholderData: keepPreviousData,
+    });
 
   const addFactoryMutation = useMutation({
     mutationFn: addFactory,
@@ -28,11 +45,21 @@ export const useFactories = (filterString = '') => {
   });
 
   return {
-    data,
+    factories: data?.data || [],
+    pagination: data?.pagination || {
+      page: 1,
+      limit: 20,
+      total: 0,
+      totalPages: 0,
+      hasNext: false,
+      hasPrev: false,
+    },
+
     isLoading,
     isError,
     error: error as Error | null,
     refetch,
+
     addFactory: {
       mutate: addFactoryMutation.mutate,
       mutateAsync: addFactoryMutation.mutateAsync,

@@ -10,6 +10,8 @@ import FactoryRoundedIcon from '@mui/icons-material/FactoryRounded';
 
 import logoUrl from '../../assets/logo.png';
 
+import styles from './Wrapper.module.sass';
+
 const NAVIGATION: Navigation = [
   {
     kind: 'header',
@@ -78,7 +80,7 @@ export function Wrapper() {
       router={router}
     >
       <DashboardLayout defaultSidebarCollapsed sidebarExpandedWidth={240}>
-        <Box sx={{ display: 'flex', overflow: 'hidden' }}>
+        <Box className={styles.container}>
           <Outlet />
         </Box>
       </DashboardLayout>
