@@ -6,16 +6,16 @@ import { FactoryAdapter, DatabaseAdapter } from 'adapters';
 import {
   validateRequest,
   GetFactoriesQuery,
-  getFactoriesQuerySchema,
+  getFactoriesSchema,
 } from 'validation';
 
 export const getFactories = async (context: Context) => {
   try {
-    const queryParams = { q: context.req.query('q') };
+    const params = { q: context.req.query('q') };
 
     const validation = validateRequest<GetFactoriesQuery>(
-      getFactoriesQuerySchema,
-      queryParams
+      getFactoriesSchema,
+      params
     );
     if (validation.data === undefined || !validation.success) {
       return context.json(

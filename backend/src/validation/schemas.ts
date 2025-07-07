@@ -9,14 +9,14 @@ export const addFactorySchema = z.object({
   yearlyRevenue: z.coerce.number().positive('Yearly revenue must be positive'),
 });
 
-export const getFactoriesQuerySchema = z.object({
+export const getFactoriesSchema = z.object({
   q: z.string().optional(),
 });
 
-export const getReportParamsSchema = z.object({
+export const getReportSchema = z.object({
   id: z.string().min(1, 'Factory ID is required'),
 });
 
 export type AddFactoryRequest = z.infer<typeof addFactorySchema>;
-export type GetFactoriesQuery = z.infer<typeof getFactoriesQuerySchema>;
-export type GetReportParams = z.infer<typeof getReportParamsSchema>;
+export type GetFactoriesQuery = z.infer<typeof getFactoriesSchema>;
+export type GetReportParams = z.infer<typeof getReportSchema>;

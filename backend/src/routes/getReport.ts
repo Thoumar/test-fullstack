@@ -2,19 +2,15 @@ import { Context } from 'hono';
 
 import { generateReport } from 'utils';
 import { DatabaseAdapter, FactoryAdapter } from 'adapters';
-import {
-  validateRequest,
-  GetReportParams,
-  getReportParamsSchema,
-} from 'validation';
+import { validateRequest, GetReportParams, getReportSchema } from 'validation';
 
 export const getReport = async (context: Context) => {
   try {
-    const queryParams = { id: context.req.param('id') };
+    const params = { id: context.req.param('id') };
 
     const validation = validateRequest<GetReportParams>(
-      getReportParamsSchema,
-      queryParams
+      getReportSchema,
+      params
     );
     if (validation.data === undefined || !validation.success) {
       return context.json(

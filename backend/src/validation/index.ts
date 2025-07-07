@@ -2,8 +2,8 @@ export { validateRequest, type ValidationResult } from './validate';
 
 export {
   addFactorySchema,
-  getFactoriesQuerySchema,
-  getReportParamsSchema,
+  getFactoriesSchema,
+  getReportSchema,
   type AddFactoryRequest,
   type GetFactoriesQuery,
   type GetReportParams,
