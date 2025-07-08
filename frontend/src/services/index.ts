@@ -1,8 +1,4 @@
-export { getReport } from './reports';
+export { getReport, type GetReportParams, type GetReportResult } from './reports';
 
-export {
-  addFactory,
-  getFactories,
-  type AddFactoryParams,
-  type AddFactoryResult,
-} from './factories';
+export { addFactory, type AddFactoryParams, type AddFactoryResult } from './factories';
+export { getFactories, type GetFactoriesParams, type GetFactoriesResult } from './factories';

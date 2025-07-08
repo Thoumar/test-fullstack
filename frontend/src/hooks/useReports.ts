@@ -1,17 +1,26 @@
 import { useQuery } from '@tanstack/react-query';
 
-import { getReport } from 'services';
+import { getReport, type GetReportResult } from 'services';
 
-export const useReport = ({ id }: { id: string }) => {
-  const { data, isLoading, isError, error, refetch } = useQuery({
+interface UseReportParams {
+  id: string;
+}
+
+export const useReport = ({ id }: UseReportParams) => {
+  const {
+    data: report,
+    isLoading,
+    isError,
+    error,
+    refetch,
+  } = useQuery<Awaited<GetReportResult>>({
     queryKey: ['report', id],
     queryFn: () => getReport({ id }),
     enabled: !!id,
-    retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
   });
 
   return {
-    data,
+    report,
     isLoading,
     isError,
     error: error as Error | null,

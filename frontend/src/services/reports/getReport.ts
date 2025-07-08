@@ -1,10 +1,8 @@
-import { Factory } from '@climadex/shared';
+import { Report } from '@climadex/shared';
 
-type GetReportParams = {
-  id: string;
-};
+export type GetReportParams = { id: string };
 
-type GetReportResult = Promise<Factory>;
+export type GetReportResult = Promise<Report>;
 
 export const getReport = async ({ id }: GetReportParams): GetReportResult => {
   const url = `${import.meta.env.VITE_PUBLIC_API_URL}/reports/${id}`;

@@ -1,10 +1,6 @@
-import {
-  Factory,
-  FactoriesFilters,
-  FactoriesPagination,
-} from '@climadex/shared';
+import { Factory, FactoriesFilters, FactoriesPagination } from '@climadex/shared';
 
-import { createSearchParamsFromFiltersAndPagination } from 'utils';
+import { createSearchParamsForFactories } from 'utils';
 
 export type GetFactoriesParams = {
   filters?: FactoriesFilters;
@@ -12,7 +8,7 @@ export type GetFactoriesParams = {
 };
 
 export type GetFactoriesResult = Promise<{
-  data: Factory[];
+  factories: Factory[];
   pagination: {
     page: number;
     limit: number;
@@ -29,10 +25,7 @@ export const getFactories = async ({
 }: GetFactoriesParams = {}): GetFactoriesResult => {
   const url = `${import.meta.env.VITE_PUBLIC_API_URL}/factories`;
 
-  const searchParams = createSearchParamsFromFiltersAndPagination({
-    filters,
-    pagination,
-  });
+  const searchParams = createSearchParamsForFactories({ filters, pagination });
 
   const response = await fetch(`${url}?${searchParams.toString()}`);
 

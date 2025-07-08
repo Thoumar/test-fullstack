@@ -1,11 +1,21 @@
-.arrayCell
+.container
     display: flex
+    flex-direction: column
+    justify-content: center
+    overflow: hidden
+    padding-top: 1rem
+
+.header
+    display: flex
+    justify-content: space-between
     align-items: center
-    height: 100%
+    margin-bottom: 1rem
 
 .datagrid
-    & .MuiDataGrid-cell:focus
+    & .MuiDataGrid-cell
         outline: none
 
-    & .MuiDataGrid-columnHeader:focus
-        outline: none
+.pagination
+    display: flex
+    justify-content: center
+    margin-top: 2rem

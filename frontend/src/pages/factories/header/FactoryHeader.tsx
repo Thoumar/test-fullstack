@@ -1,36 +1,49 @@
-import { useCallback } from 'react';
+import { useCallback, useState, useEffect } from 'react';
 
-import { FactoriesFilters } from '@climadex/shared';
+import { FactoriesFilters, FactoryFilterValues } from '@climadex/shared';
 
-import { Typography, Grid, TextField, Box } from '@mui/material';
+import { Typography, Grid, TextField, Box, CircularProgress } from '@mui/material';
 
 import styles from './FactoryHeader.module.sass';
 
 export type FactoryHeader = {
   filters: FactoriesFilters;
   onFiltersChange: (filters: FactoriesFilters) => void;
+  isLoading?: boolean;
 };
 
-export function FactoryHeader({ filters, onFiltersChange }: FactoryHeader) {
-  const handleFilterChange = useCallback(
-    (key: keyof FactoriesFilters, value: any) => {
-      onFiltersChange({ ...filters, [key]: value || undefined });
-    },
-    [filters, onFiltersChange]
-  );
+export function FactoryHeader({ filters, onFiltersChange, isLoading }: FactoryHeader) {
+  const [localFilters, setLocalFilters] = useState<FactoriesFilters>(filters);
+
+  useEffect(() => {
+    setLocalFilters(filters);
+  }, [filters]);
+
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      onFiltersChange(localFilters);
+    }, 300);
+
+    return () => clearTimeout(timeoutId);
+  }, [localFilters, onFiltersChange]);
+
+  const handleFilterChange = useCallback((key: keyof FactoriesFilters, value: FactoryFilterValues) => {
+    setLocalFilters((prev) => ({ ...prev, [key]: value || undefined }));
+  }, []);
 
   return (
     <Box className={styles.header}>
-      <Typography variant="h6" gutterBottom>
-        Filters
-      </Typography>
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
+        <Typography variant="h6">Filters</Typography>
+        {isLoading && <CircularProgress size={16} />}
+      </Box>
       <Grid container spacing={2}>
         <Grid size={3}>
           <TextField
             size="small"
             fullWidth
             label="Search factories"
-            value={filters.search || ''}
+            value={localFilters.search || ''}
             onChange={(e) => handleFilterChange('search', e.target.value)}
             placeholder="Factory name..."
           />
@@ -40,7 +53,7 @@ export function FactoryHeader({ filters, onFiltersChange }: FactoryHeader) {
             size="small"
             fullWidth
             label="Country"
-            value={filters.country || ''}
+            value={localFilters.country || ''}
             onChange={(e) => handleFilterChange('country', e.target.value)}
             placeholder="e.g., USA, Germany"
           />
@@ -51,13 +64,8 @@ export function FactoryHeader({ filters, onFiltersChange }: FactoryHeader) {
             fullWidth
             label="Min Revenue"
             type="number"
-            value={filters.minRevenue || ''}
-            onChange={(e) =>
-              handleFilterChange(
-                'minRevenue',
-                e.target.value ? parseFloat(e.target.value) : undefined
-              )
-            }
+            value={localFilters.minRevenue || ''}
+            onChange={(e) => handleFilterChange('minRevenue', e.target.value ? parseFloat(e.target.value) : undefined)}
             placeholder="0"
           />
         </Grid>
@@ -67,13 +75,8 @@ export function FactoryHeader({ filters, onFiltersChange }: FactoryHeader) {
             fullWidth
             label="Max Revenue"
             type="number"
-            value={filters.maxRevenue || ''}
-            onChange={(e) =>
-              handleFilterChange(
-                'maxRevenue',
-                e.target.value ? parseFloat(e.target.value) : undefined
-              )
-            }
+            value={localFilters.maxRevenue || ''}
+            onChange={(e) => handleFilterChange('maxRevenue', e.target.value ? parseFloat(e.target.value) : undefined)}
             placeholder="999999999"
           />
         </Grid>

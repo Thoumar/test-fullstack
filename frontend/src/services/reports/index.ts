@@ -1,1 +1,1 @@
-export { getReport } from './getReport';
+export { getReport, type GetReportParams, type GetReportResult } from './getReport';

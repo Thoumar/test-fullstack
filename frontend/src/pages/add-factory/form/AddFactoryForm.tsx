@@ -43,7 +43,7 @@ const initialValues: FactoryFormValues = {
 export function AddFactoryForm() {
   const [formError, setFormError] = useState('');
   const [formSuccess, setFormSuccess] = useState(false);
-  const { addFactory } = useFactories();
+  const { addFactory } = useFactories({});
 
   if (formSuccess) return <Navigate to="/factories" />;
 
