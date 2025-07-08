@@ -8,5 +8,5 @@
     "moduleResolution": "Node",
     "esModuleInterop": true
   },
-  "include": ["src", "constants.ts", "index.ts", "types.ts"]
+  "include": ["src", "constants.ts", "index.ts"]
 }
