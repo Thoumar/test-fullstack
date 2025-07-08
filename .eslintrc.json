@@ -30,16 +30,7 @@
             "order": "asc",
             "fallbackSort": { "type": "unsorted" },
             "ignoreCase": true,
-            "groups": [
-              "react",
-              "react-router-dom",
-              "external",
-              "climadex",
-              "at",
-              "frontend",
-              "relative",
-              "styles"
-            ],
+            "groups": ["react", "react-router-dom", "external", "climadex", "at", "frontend", "relative", "styles"],
             "customGroups": [
               {
                 "groupName": "react",
@@ -55,11 +46,11 @@
               },
               {
                 "groupName": "at",
-                "elementNamePattern": "^@(mui|tanstack|hono)"
+                "elementNamePattern": "^@(mui|tanstack|hono|toolpad)"
               },
               {
                 "groupName": "frontend",
-                "elementNamePattern": "^(frontend|common|components|pages|hooks|services|adapters|routes|utils|middlewares|validation)(\\/.*)?$"
+                "elementNamePattern": "^(config|common|components|pages|hooks|services|adapters|routes|utils|middlewares|validation)(\\/.*)?$"
               },
               {
                 "groupName": "styles",
