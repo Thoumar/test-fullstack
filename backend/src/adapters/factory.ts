@@ -1,25 +1,12 @@
 import { Database } from 'sqlite';
 import { Database as Driver, Statement } from 'sqlite3';
 
-import { Factory } from '@climadex/shared';
+import { DbFactory, Factory, FilterOptions, PaginationOptions } from '@climadex/shared';
 
-import { calculateRisk } from '../utils';
-
-interface PaginationOptions {
-  page?: number;
-  limit?: number;
-}
-
-interface FilterOptions {
-  country?: string;
-  minRevenue?: number;
-  maxRevenue?: number;
-}
-
-interface Options extends PaginationOptions, FilterOptions {}
+import { calculateRisk, sanitizePagination } from 'utils';
 
 interface PaginatedResult<T> {
-  data: T[];
+  factories: T[];
   pagination: {
     page: number;
     limit: number;
@@ -30,12 +17,14 @@ interface PaginatedResult<T> {
   };
 }
 
-interface FactoryRepository {
+type Options = PaginationOptions & FilterOptions;
+
+type FactoryRepository = {
   create(factory: Factory): Promise<void>;
   findAll(options?: Options): Promise<PaginatedResult<Factory>>;
   findByName(query: string): Promise<Factory[]>;
   findById(id: string): Promise<Factory | undefined>;
-}
+};
 
 export class FactoryAdapter implements FactoryRepository {
   constructor(private db: Database<Driver, Statement>) {}
@@ -53,31 +42,30 @@ export class FactoryAdapter implements FactoryRepository {
     );
   }
 
-  async findAll(options: Options = {}): Promise<PaginatedResult<Factory>> {
-    const { page = 1, limit = 25 } = options;
-    const sanitizedLimit = Math.min(Math.max(1, limit), 100);
-    const sanitizedPage = Math.max(1, page);
-    const offset = (sanitizedPage - 1) * sanitizedLimit;
+  async findAll(options: Options): Promise<PaginatedResult<Factory>> {
+    const { page = 1, limit = 20 } = options;
+    const { sanitizedLimit, sanitizedPage, offset } = sanitizePagination({
+      page,
+      limit,
+    });
 
     const { whereClause, params } = this.buildWhereClause(options);
 
-    const totalResult = await this.db.get(
-      `SELECT COUNT(*) as count FROM factories ${whereClause}`,
-      params
-    );
+    const totalResult = await this.db.get(`SELECT COUNT(*) as count FROM factories ${whereClause}`, params);
 
     const total = totalResult.count;
 
-    const dbFactories = await this.db.all(
-      `SELECT * FROM factories ${whereClause} ORDER BY id LIMIT ? OFFSET ?`,
-      [...params, sanitizedLimit, offset]
-    );
+    const dbFactories = await this.db.all(`SELECT * FROM factories ${whereClause} ORDER BY id LIMIT ? OFFSET ?`, [
+      ...params,
+      sanitizedLimit,
+      offset,
+    ]);
 
     const factories = dbFactories.map(this.mapDbFactoryToFactory);
     const totalPages = Math.ceil(total / sanitizedLimit);
 
     return {
-      data: factories,
+      factories,
       pagination: {
         page: sanitizedPage,
         limit: sanitizedLimit,
@@ -90,30 +78,25 @@ export class FactoryAdapter implements FactoryRepository {
   }
 
   async findByName(query: string): Promise<Factory[]> {
-    const dbFactories = await this.db.all(
-      `SELECT * FROM factories WHERE LOWER(factory_name) LIKE ?;`,
-      [`%${query.toLowerCase()}%`]
-    );
+    const dbFactories = await this.db.all(`SELECT * FROM factories WHERE LOWER(factory_name) LIKE ?;`, [
+      `%${query.toLowerCase()}%`,
+    ]);
 
     return dbFactories.map(this.mapDbFactoryToFactory);
   }
 
   async findById(id: string): Promise<Factory | undefined> {
-    const dbFactory = await this.db.get(
-      'SELECT * FROM factories WHERE id = ?',
-      id
-    );
-    if (!dbFactory) return undefined;
+    const dbFactory = await this.db.get('SELECT * FROM factories WHERE id = ?', id);
 
-    return this.mapDbFactoryToFactory(dbFactory);
+    return dbFactory ? this.mapDbFactoryToFactory(dbFactory) : undefined;
   }
 
   private buildWhereClause(options: FilterOptions): {
     whereClause: string;
-    params: any[];
+    params: FilterOptions[keyof FilterOptions][];
   } {
     const conditions: string[] = [];
-    const params: any[] = [];
+    const params: FilterOptions[keyof FilterOptions][] = [];
 
     if (options.country) {
       conditions.push('LOWER(country) = ?');
@@ -130,12 +113,11 @@ export class FactoryAdapter implements FactoryRepository {
       params.push(options.maxRevenue);
     }
 
-    const whereClause =
-      conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : '';
+    const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : '';
     return { whereClause, params };
   }
 
-  private mapDbFactoryToFactory = (dbFactory: any): Factory => {
+  private mapDbFactoryToFactory = (dbFactory: DbFactory): Factory => {
     const riskCalculation = calculateRisk({
       latitude: dbFactory.latitude,
       longitude: dbFactory.longitude,

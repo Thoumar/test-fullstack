@@ -6,10 +6,7 @@ export interface ValidationResult<T> {
   errors?: ZodIssue[];
 }
 
-export const validateRequest = <T>(
-  schema: ZodSchema<T>,
-  data: T
-): ValidationResult<T> => {
+export const validateRequest = <T>(schema: ZodSchema<T>, data: T): ValidationResult<T> => {
   const result = schema.safeParse(data);
 
   if (result.success) {

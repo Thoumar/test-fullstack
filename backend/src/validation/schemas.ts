@@ -15,21 +15,14 @@ export const getFactoriesSchema = z
     page: z
       .string()
       .optional()
-      .refine(
-        (val) =>
-          val === undefined ||
-          (!isNaN(parseInt(val, 10)) && parseInt(val, 10) > 0),
-        { message: 'Page must be a positive integer' }
-      ),
+      .refine((val) => val === undefined || (!isNaN(parseInt(val, 10)) && parseInt(val, 10) > 0), {
+        message: 'Page must be a positive integer',
+      }),
     limit: z
       .string()
       .optional()
       .refine(
-        (val) =>
-          val === undefined ||
-          (!isNaN(parseInt(val, 10)) &&
-            parseInt(val, 10) > 0 &&
-            parseInt(val, 10) <= 100),
+        (val) => val === undefined || (!isNaN(parseInt(val, 10)) && parseInt(val, 10) > 0 && parseInt(val, 10) <= 100),
         { message: 'Limit must be a positive integer between 1 and 100' }
       ),
     country: z
@@ -41,21 +34,15 @@ export const getFactoriesSchema = z
     minRevenue: z
       .string()
       .optional()
-      .refine(
-        (val) =>
-          val === undefined ||
-          (!isNaN(parseFloat(val)) && parseFloat(val) >= 0),
-        { message: 'MinRevenue must be a non-negative number' }
-      ),
+      .refine((val) => val === undefined || (!isNaN(parseFloat(val)) && parseFloat(val) >= 0), {
+        message: 'MinRevenue must be a non-negative number',
+      }),
     maxRevenue: z
       .string()
       .optional()
-      .refine(
-        (val) =>
-          val === undefined ||
-          (!isNaN(parseFloat(val)) && parseFloat(val) >= 0),
-        { message: 'MaxRevenue must be a non-negative number' }
-      ),
+      .refine((val) => val === undefined || (!isNaN(parseFloat(val)) && parseFloat(val) >= 0), {
+        message: 'MaxRevenue must be a non-negative number',
+      }),
   })
   .refine(
     (data) => {

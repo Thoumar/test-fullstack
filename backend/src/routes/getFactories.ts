@@ -1,45 +1,27 @@
 import { Context } from 'hono';
 
 import { FactoryAdapter, DatabaseAdapter } from 'adapters';
-import {
-  validateRequest,
-  GetFactoriesQuery,
-  getFactoriesSchema,
-} from 'validation';
+import { validateRequest, GetFactoriesQuery, getFactoriesSchema } from 'validation';
 
 export const getFactories = async (context: Context) => {
   try {
-    const params = {
+    const validation = validateRequest<GetFactoriesQuery>(getFactoriesSchema, {
       q: context.req.query('q'),
       page: context.req.query('page'),
       limit: context.req.query('limit'),
       country: context.req.query('country'),
       minRevenue: context.req.query('minRevenue'),
       maxRevenue: context.req.query('maxRevenue'),
-    };
+    });
 
-    const validation = validateRequest<GetFactoriesQuery>(
-      getFactoriesSchema,
-      params
-    );
     if (validation.data === undefined || !validation.success) {
-      return context.json(
-        { error: 'Invalid query parameters', details: validation.errors },
-        400
-      );
+      return context.json({ error: 'Invalid query parameters', details: validation.errors }, 400);
     }
 
     const dbClient = DatabaseAdapter.getClient(context);
     const factoryAdapter = new FactoryAdapter(dbClient);
 
-    const {
-      q: searchQuery,
-      page,
-      limit,
-      country,
-      minRevenue,
-      maxRevenue,
-    } = validation.data;
+    const { q: searchQuery, page, limit, country, minRevenue, maxRevenue } = validation.data;
 
     const name = searchQuery?.trim().toLowerCase();
     if (name) {
@@ -54,7 +36,7 @@ export const getFactories = async (context: Context) => {
       const totalPages = Math.ceil(total / parsedLimit);
 
       return context.json({
-        data: paginatedFactories,
+        factories: paginatedFactories,
         pagination: {
           page: parsedPage,
           limit: parsedLimit,

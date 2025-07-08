@@ -11,10 +11,7 @@ export const addFactory = async (context: Context) => {
 
     const validation = validateRequest<Factory>(addFactorySchema, body);
     if (validation.data === undefined || !validation.success) {
-      return context.json(
-        { error: 'Invalid request body', details: validation.errors },
-        400
-      );
+      return context.json({ error: 'Invalid request body', details: validation.errors }, 400);
     }
 
     const dbClient = DatabaseAdapter.getClient(context);

@@ -6,17 +6,12 @@ import { validateRequest, GetReportParams, getReportSchema } from 'validation';
 
 export const getReport = async (context: Context) => {
   try {
-    const params = { id: context.req.param('id') };
+    const validation = validateRequest<GetReportParams>(getReportSchema, {
+      id: context.req.param('id'),
+    });
 
-    const validation = validateRequest<GetReportParams>(
-      getReportSchema,
-      params
-    );
     if (validation.data === undefined || !validation.success) {
-      return context.json(
-        { error: 'Invalid query parameters', details: validation.errors },
-        400
-      );
+      return context.json({ error: 'Invalid query parameters', details: validation.errors }, 400);
     }
 
     const dbClient = DatabaseAdapter.getClient(context);
